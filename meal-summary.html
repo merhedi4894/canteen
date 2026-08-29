@@ -231,23 +231,40 @@ const FIREBASE_CONFIG = {
 };
 const MONTHS_BN = ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
 const app = initializeApp(FIREBASE_CONFIG);
+// CRITICAL: Force clear ALL old IndexedDB databases from previous versions
+const MS_CACHE_VERSION = 'v4_memory_cache_force';
+try{
+  const storedVersion = localStorage.getItem('canteen_ms_cache_version');
+  if(storedVersion !== MS_CACHE_VERSION){
+    console.log('[meal-summary] Cache version mismatch — clearing old IndexedDB');
+    if(indexedDB.databases){
+      indexedDB.databases().then(dbs=>{
+        const deletePromises = dbs.map(dbInfo=>{
+          if(dbInfo.name){
+            return new Promise((resolve)=>{
+              const req = indexedDB.deleteDatabase(dbInfo.name);
+              req.onsuccess = ()=> resolve();
+              req.onerror = ()=> resolve();
+              req.onblocked = ()=> resolve();
+            });
+          }
+          return Promise.resolve();
+        });
+        Promise.all(deletePromises).then(()=>{
+          localStorage.setItem('canteen_ms_cache_version', MS_CACHE_VERSION);
+        });
+      }).catch(()=>{ localStorage.setItem('canteen_ms_cache_version', MS_CACHE_VERSION); });
+    }else{
+      localStorage.setItem('canteen_ms_cache_version', MS_CACHE_VERSION);
+    }
+  }
+}catch(e){}
+
 // Use memoryLocalCache — NO IndexedDB persistence.
 // All reads/writes go directly to server. No stale cache.
 const db = initializeFirestore(app, {
   localCache: memoryLocalCache({})
 });
-// Clear any OLD IndexedDB Firestore databases from previous versions
-try{
-  if(indexedDB.databases){
-    indexedDB.databases().then(dbs=>{
-      dbs.forEach(dbInfo=>{
-        if(dbInfo.name && (dbInfo.name.startsWith('firestore') || dbInfo.name.includes('firebase'))){
-          indexedDB.deleteDatabase(dbInfo.name).catch(()=>{});
-        }
-      });
-    }).catch(()=>{});
-  }
-}catch(e){}
 let allRecords = [], availableYears = new Set(), yearMonthMap = {};
 let allComplaints = []; // array of all complaint docs
 let currentRates = {breakfast:60, lunch:132};
