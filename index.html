@@ -1,0 +1,3457 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+<meta name="theme-color" content="#1e40af" />
+<meta name="description" content="ক্যান্টিন - মাসিক মিল হিসাব ব্যবস্থাপনা সিস্টেম" />
+<title>ক্যান্টিন</title>
+<link rel="manifest" href="./manifest.json" />
+<!-- App Icon (PWA) — multiple sizes for proper install support -->
+<link rel="icon" type="image/png" sizes="72x72" href="./icons/icon-72x72.png" />
+<link rel="icon" type="image/png" sizes="96x96" href="./icons/icon-96x96.png" />
+<link rel="icon" type="image/png" sizes="128x128" href="./icons/icon-128x128.png" />
+<link rel="icon" type="image/png" sizes="144x144" href="./icons/icon-144x144.png" />
+<link rel="icon" type="image/png" sizes="152x152" href="./icons/icon-152x152.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192x192.png" />
+<link rel="icon" type="image/png" sizes="384x384" href="./icons/icon-384x384.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="./icons/icon-512x512.png" />
+<link rel="apple-touch-icon" href="./icons/icon-192x192.png" />
+<link rel="apple-touch-icon" sizes="144x144" href="./icons/icon-144x144.png" />
+<link rel="apple-touch-icon" sizes="152x152" href="./icons/icon-152x152.png" />
+<link rel="apple-touch-icon" sizes="192x192" href="./icons/icon-192x192.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="ক্যান্টিন" />
+<meta name="mobile-web-app-capable" content="yes" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<style>
+:root{
+  /* Eye-friendly palette: warm soft beige bg + calm blue accents */
+  --brand:#1e40af;--brand-2:#1e3a8a;--brand-3:#2563eb;--brand-light:#dbeafe;
+  --accent:#0891b2;--danger:#dc2626;--success:#16a34a;--warning:#d97706;--info:#0284c7;
+  --bg:#f5f1ea;            /* warm beige background — eye-friendly */
+  --card:#ffffff;
+  --card-soft:#fbf8f3;     /* soft cream card-2 */
+  --card-2:#f0ebe1;        /* beige subtle */
+  --text-0:#1c1917;        /* near-black, soft */
+  --text-1:#44403c;        /* warm gray */
+  --text-2:#78716c;        /* medium warm gray */
+  --text-3:#a8a29e;        /* light warm gray */
+  --text-inv:#fff;
+  --line:#e7e1d6;          /* warm border */
+  --line-2:#d6cdbd;
+  --ring:0 0 0 3px rgba(37,99,235,.18);
+  --shadow-sm:0 1px 2px rgba(28,25,23,.05);
+  --shadow:0 4px 12px -2px rgba(28,25,23,.08);
+  --shadow-md:0 10px 25px -5px rgba(28,25,23,.1);
+  --shadow-lg:0 20px 40px -12px rgba(28,25,23,.18);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;scroll-behavior:smooth}
+body{
+  font-family:'Hind Siliguri','Inter',system-ui,sans-serif;
+  background:var(--bg);color:var(--text-0);min-height:100vh;
+  -webkit-font-smoothing:antialiased;line-height:1.55;
+}
+button,input,select,textarea{font-family:inherit;font-size:inherit}
+a{color:inherit;text-decoration:none}
+
+/* ===== AUTH PAGES — Light professional theme ===== */
+.auth-wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:20px;gap:14px;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(59,130,246,.35), transparent 45%),
+    radial-gradient(circle at 85% 80%, rgba(14,165,233,.30), transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(168,85,247,.15), transparent 60%),
+    linear-gradient(135deg, #0f172a 0%, #1e293b 35%, #0c4a6e 70%, #1e3a8a 100%);
+  position:relative;overflow:hidden}
+/* Animated floating orbs */
+.auth-wrap::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(99,179,237,.18), transparent 35%),
+    radial-gradient(circle at 80% 70%, rgba(45,212,191,.12), transparent 35%),
+    radial-gradient(circle at 60% 20%, rgba(167,139,250,.15), transparent 40%);
+  animation:orbFloat 18s ease-in-out infinite alternate;
+}
+.auth-wrap::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(180deg, transparent 0%, rgba(0,0,0,.15) 100%);
+}
+@keyframes orbFloat{
+  0%{transform:translate(0,0) rotate(0deg)}
+  50%{transform:translate(-15px,15px) rotate(2deg)}
+  100%{transform:translate(15px,-15px) rotate(-2deg)}
+}
+.auth-card{
+  position:relative;z-index:2;
+  background:rgba(255,255,255,.97);
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  border-radius:24px;
+  box-shadow:
+    0 30px 60px -15px rgba(0,0,0,.5),
+    0 18px 36px -18px rgba(30,64,175,.45),
+    0 8px 16px -8px rgba(0,0,0,.3),
+    inset 0 1px 0 rgba(255,255,255,.8),
+    inset 0 -1px 0 rgba(0,0,0,.05);
+  width:100%;max-width:420px;padding:40px 32px;
+  animation:cardEnter .6s cubic-bezier(.16,1,.3,1);
+  border:1px solid rgba(255,255,255,.4);
+  transform-style:preserve-3d;
+  transition:transform .3s ease;
+}
+.auth-card:hover{
+  transform:translateY(-2px) rotateX(1deg);
+}
+@keyframes cardEnter{
+  from{opacity:0;transform:translateY(20px) scale(.96)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+.auth-brand{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:28px;text-align:center}
+.auth-logo{
+  width:72px;height:72px;border-radius:20px;
+  background:linear-gradient(135deg,#3b82f6 0%,#1e40af 50%,#0891b2 100%);
+  display:flex;align-items:center;justify-content:center;font-size:32px;color:white;
+  box-shadow:
+    0 12px 28px -6px rgba(59,130,246,.5),
+    0 6px 14px -4px rgba(30,64,175,.4),
+    inset 0 2px 4px rgba(255,255,255,.4),
+    inset 0 -2px 4px rgba(0,0,0,.15);
+  position:relative;
+  animation:logoPulse 3s ease-in-out infinite;
+}
+@keyframes logoPulse{
+  0%,100%{transform:translateY(0) scale(1);box-shadow:0 12px 28px -6px rgba(59,130,246,.5),0 6px 14px -4px rgba(30,64,175,.4),inset 0 2px 4px rgba(255,255,255,.4),inset 0 -2px 4px rgba(0,0,0,.15)}
+  50%{transform:translateY(-3px) scale(1.02);box-shadow:0 18px 36px -6px rgba(59,130,246,.6),0 10px 22px -4px rgba(30,64,175,.5),inset 0 2px 4px rgba(255,255,255,.4),inset 0 -2px 4px rgba(0,0,0,.15)}
+}
+.auth-app-name{font-size:26px;font-weight:800;color:#0f172a;letter-spacing:-.5px;text-align:center;
+  background:linear-gradient(135deg,#1e3a8a 0%,#0891b2 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  text-shadow:0 1px 2px rgba(0,0,0,.05)}
+.form-control{
+  width:100%;padding:13px 14px;font-size:14px;
+  border:1.5px solid #e2e8f0;border-radius:12px;
+  background:rgba(248,250,252,.9);color:var(--text-0);transition:all .2s;
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.04);
+}
+.form-control::placeholder{color:var(--text-3)}
+.form-control:focus{outline:none;border-color:#3b82f6;box-shadow:0 0 0 4px rgba(59,130,246,.15),inset 0 1px 2px rgba(0,0,0,.04);background:white;transform:translateY(-1px)}
+.btn-primary{
+  background:linear-gradient(135deg,#3b82f6 0%,#1e40af 50%,#0891b2 100%);
+  color:white;
+  box-shadow:
+    0 8px 20px -6px rgba(59,130,246,.5),
+    0 4px 10px -4px rgba(30,64,175,.4),
+    inset 0 1px 0 rgba(255,255,255,.3),
+    inset 0 -1px 0 rgba(0,0,0,.15);
+  position:relative;
+  overflow:hidden;
+}
+.btn-primary::before{
+  content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);
+  transition:left .6s;
+}
+.btn-primary:hover::before{left:100%}
+.btn-primary:hover{
+  background:linear-gradient(135deg,#2563eb 0%,#1e3a8a 50%,#0e7490 100%);
+  box-shadow:
+    0 12px 28px -6px rgba(59,130,246,.6),
+    0 8px 16px -4px rgba(30,64,175,.5),
+    inset 0 1px 0 rgba(255,255,255,.3),
+    inset 0 -1px 0 rgba(0,0,0,.15);
+  transform:translateY(-1px);
+}
+.btn-primary:active{
+  background:linear-gradient(135deg,#1d4ed8 0%,#1e3a8a 50%,#0e7490 100%);
+  transform:translateY(0) scale(.99);
+}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.auth-footer{position:relative;z-index:2;text-align:center;padding:0;margin-top:0}
+.auth-footer .watermark{color:rgba(255,255,255,.75);opacity:.9;font-size:11px;letter-spacing:.3px}
+.auth-footer .watermark .name{color:#60a5fa;font-weight:600;text-shadow:0 0 8px rgba(96,165,250,.4)}
+
+
+.form-group{margin-bottom:14px}
+.form-label{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--text-1);margin-bottom:6px}
+.form-label .req{color:var(--danger);font-weight:700}
+select.form-control{cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat:no-repeat;background-position:right 13px center;padding-right:36px}
+.input-group{position:relative}
+.input-group .form-control{padding-right:42px}
+.input-group .input-icon{position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  color:var(--text-2);cursor:pointer;font-size:17px;background:none;border:none;padding:6px;border-radius:6px}
+.input-group .input-icon:hover{color:var(--brand);background:var(--card-2)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  padding:10px 16px;font-size:14px;font-weight:600;border:none;border-radius:9px;
+  cursor:pointer;transition:all .15s;white-space:nowrap}
+.btn:active{transform:scale(.98)}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed}
+.btn-danger{background:var(--danger);color:white}
+.btn-danger:hover{background:#b91c1c}
+.btn-success{background:var(--success);color:white}
+.btn-outline{background:transparent;border:1.5px solid var(--line);color:var(--text-1)}
+.btn-outline:hover{border-color:var(--brand);color:var(--brand);background:var(--brand-light)}
+.btn-block{width:100%}
+.btn-sm{padding:8px 12px;font-size:13px;border-radius:7px}
+.btn-lg{padding:12px 20px;font-size:15px}
+
+.alert{padding:11px 13px;border-radius:9px;font-size:13px;margin-bottom:14px;
+  display:flex;align-items:flex-start;gap:9px;line-height:1.5}
+.alert i{font-size:15px;margin-top:1px;flex-shrink:0}
+.alert-error{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+.alert-success{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+.alert-info{background:#eff6ff;color:#1e40af;border:1px solid #bfdbfe}
+.alert-warning{background:#fffbeb;color:#92400e;border:1px solid #fde68a}
+
+.auth-divider{display:flex;align-items:center;gap:10px;margin:16px 0;color:var(--text-3);font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+.auth-divider::before,.auth-divider::after{content:"";flex:1;height:1px;background:var(--line)}
+.auth-link{text-align:center;margin-top:16px;font-size:13px;color:var(--text-2)}
+.auth-link a{color:var(--brand);font-weight:600;cursor:pointer}
+.auth-link a:hover{text-decoration:underline}
+
+/* ===== APP LAYOUT ===== */
+.app{display:none;min-height:100vh;background:var(--bg);flex-direction:column}
+.app.active{display:flex}
+.app-header{background:var(--brand);color:white;padding:10px 24px;
+  display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:50;
+  box-shadow:0 2px 12px -4px rgba(0,0,0,.2)}
+.app-header .brand{display:flex;align-items:center;gap:10px;flex:1;min-width:0;justify-content:center}
+.app-header .brand-logo{width:36px;height:36px;border-radius:9px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--accent) 0%,#06b6d4 100%);
+  display:flex;align-items:center;justify-content:center;font-size:19px}
+.app-header .brand-name{font-size:20px;font-weight:700;line-height:1.1;white-space:nowrap}
+.app-header .brand-tag{font-size:11px;opacity:.75;margin-top:1px;white-space:nowrap}
+.header-actions{display:flex;gap:8px;align-items:center;position:absolute;right:24px}
+.menu-toggle{display:none;background:rgba(255,255,255,.15);border:none;color:white;
+  width:38px;height:38px;border-radius:9px;font-size:19px;cursor:pointer;flex-shrink:0;position:absolute;left:14px}
+
+.app-nav{background:white;border-bottom:1px solid var(--line);
+  padding:0 16px;display:flex;gap:4px;overflow-x:auto;position:sticky;top:62px;z-index:40;
+  scrollbar-width:thin}
+.app-nav::-webkit-scrollbar{height:4px}
+.app-nav::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:2px}
+.nav-item{padding:12px 14px;font-size:13.5px;font-weight:600;color:var(--text-2);
+  border:none;background:none;cursor:pointer;border-bottom:2.5px solid transparent;
+  display:flex;align-items:center;gap:7px;white-space:nowrap;transition:all .15s}
+.nav-item:hover{color:var(--brand);background:var(--card-2)}
+.nav-item.active{color:white;background:var(--brand);border-bottom-color:var(--brand);
+  border-radius:7px 7px 0 0;margin-top:4px;padding-bottom:8px}
+.nav-item i{font-size:15px}
+
+.app-main{padding:20px;max-width:1500px;margin:0 auto;width:100%;flex:1}
+.page{display:none}
+.page.active{display:block;animation:fadeUp .25s ease}
+
+/* ===== CARDS ===== */
+.card{background:white;border-radius:14px;padding:18px;box-shadow:var(--shadow);margin-bottom:16px;border:1px solid rgba(226,232,240,.6)}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+.card-title{font-size:16px;font-weight:700;color:var(--text-0);display:flex;align-items:center;gap:8px}
+.card-title i{color:var(--brand);font-size:18px}
+.card-actions{display:flex;gap:6px;flex-wrap:wrap}
+
+/* ===== FILTERS (compact) ===== */
+.filter-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:8px;align-items:end}
+.filter-row > .form-group{margin:0}
+.filter-row .btn{height:42px}
+
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:16px}
+.stat-card{background:white;border-radius:10px;padding:11px 13px;box-shadow:var(--shadow-sm);
+  border:1px solid var(--line);border-left:3px solid var(--brand);text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.stat-card.success{border-left-color:var(--success)}
+.stat-card.danger{border-left-color:var(--danger)}
+.stat-card.warning{border-left-color:var(--warning)}
+.stat-card.accent{border-left-color:var(--accent)}
+.stat-card.info{border-left-color:var(--info)}
+.stat-label{font-size:10.5px;color:var(--text-2);font-weight:500;margin-bottom:2px;text-transform:uppercase;letter-spacing:.2px;text-align:center}
+.stat-value{font-size:18px;font-weight:700;color:var(--text-0);line-height:1.15;text-align:center}
+
+/* ===== TABLE ===== */
+.table-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--line);background:white}
+table.data-table{width:100%;border-collapse:collapse;font-size:12.5px;background:white;min-width:760px}
+.data-table th,.data-table td{padding:9px 10px;text-align:center;border-bottom:1px solid var(--line);white-space:nowrap}
+.data-table th.left,.data-table td.left{text-align:left}
+.data-table th{background:var(--brand);color:white;font-weight:600;font-size:11px;
+  text-transform:uppercase;letter-spacing:.3px;position:sticky;top:0;z-index:1}
+.data-table tbody tr:hover{background:var(--card-2)}
+.data-table tbody tr:last-child td{border-bottom:none}
+.data-table tfoot td{background:#fef3c7;font-weight:700;border-top:2px solid var(--accent);color:#000}
+.row-action{padding:5px 7px;font-size:13px;border:none;background:none;cursor:pointer;border-radius:6px}
+.row-action.edit{color:var(--brand)}
+.row-action.edit:hover{background:var(--brand-light)}
+.row-action.delete{color:var(--danger)}
+.row-action.delete:hover{background:#fef2f2}
+.text-positive{color:var(--success);font-weight:600}
+.text-negative{color:var(--danger);font-weight:600}
+
+/* ===== MODAL ===== */
+.modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(3px);
+  display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
+.modal-overlay.active{display:flex;animation:fadeIn .2s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:white;border-radius:16px;max-width:600px;width:100%;max-height:90vh;
+  overflow-y:auto;box-shadow:var(--shadow-lg);animation:scaleUp .2s ease}
+@keyframes scaleUp{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+.modal-header{padding:16px 22px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:white;z-index:2}
+.modal-title{font-size:16px;font-weight:700;color:var(--text-0);display:flex;align-items:center;gap:8px}
+.modal-title i{color:var(--brand)}
+.modal-close{background:none;border:none;font-size:19px;color:var(--text-2);cursor:pointer;padding:6px;border-radius:7px}
+.modal-close:hover{background:var(--card-2);color:var(--text-0)}
+.modal-body{padding:22px}
+.modal-footer{padding:12px 22px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;position:sticky;bottom:0;background:white}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+
+/* ===== TOAST & LOADING ===== */
+.toast-wrap{position:fixed;top:16px;right:16px;z-index:200;display:flex;flex-direction:column;gap:8px;max-width:340px}
+.toast{background:white;border-radius:9px;padding:12px 14px;min-width:260px;box-shadow:var(--shadow-lg);
+  display:flex;align-items:center;gap:10px;font-size:13px;border-left:3px solid var(--brand);animation:slideIn .3s}
+.toast.success{border-left-color:var(--success)}
+.toast.error{border-left-color:var(--danger)}
+.toast.warning{border-left-color:var(--warning)}
+.toast i{font-size:17px}
+.toast.success i{color:var(--success)}
+.toast.error i{color:var(--danger)}
+.toast.warning i{color:var(--warning)}
+.toast.info i{color:var(--brand)}
+@keyframes slideIn{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes fadeOut{to{opacity:0;transform:translateX(20%)}}
+.loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.85);backdrop-filter:blur(3px);
+  display:none;align-items:center;justify-content:center;z-index:300;flex-direction:column;gap:12px}
+.loading-overlay.active{display:flex}
+.spinner{width:40px;height:40px;border:3px solid var(--line);border-top-color:var(--brand);border-radius:50%;animation:spin .7s linear infinite}
+.loading-text{font-size:13px;color:var(--text-1);font-weight:500}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===== CALC PREVIEW ===== */
+.calc-preview{background:var(--card-2);border:1px dashed var(--line-2);border-radius:9px;padding:11px 13px;margin-top:14px;font-size:13px}
+.calc-preview-row{display:flex;justify-content:space-between;padding:3px 0;color:var(--text-1)}
+.calc-preview-row strong{color:var(--text-0)}
+.calc-preview-row.highlight{border-top:1.5px solid var(--brand);margin-top:6px;padding-top:7px;color:var(--brand);font-weight:700;font-size:14px}
+.calc-preview-row.highlight.negative{color:var(--danger)}
+.calc-preview-row.highlight.positive{color:var(--success)}
+
+/* ===== EMPTY STATE ===== */
+.empty-state{text-align:center;padding:50px 20px;color:var(--text-2)}
+.empty-state i{font-size:48px;margin-bottom:12px;color:var(--line-2)}
+.empty-state h3{font-size:16px;color:var(--text-1);margin-bottom:6px;font-weight:600}
+.empty-state p{font-size:13px;color:var(--text-3)}
+
+/* ===== EXPORT BUTTONS (just buttons, no card) ===== */
+.export-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.export-grid .btn{padding:12px 14px;font-size:14px;font-weight:600;border-radius:9px;height:44px}
+
+/* ===== NOTE ===== */
+.note{font-size:12px;color:var(--text-1);padding:11px 13px;background:#eff6ff;border-radius:9px;border-left:3px solid var(--brand);margin-top:12px;line-height:1.6}
+/* Delete panel — mode tabs */
+.delete-tab-btn{padding:10px 14px;font-size:13px;font-weight:600;border-radius:9px;transition:all .15s;cursor:pointer;background:transparent;border:1.5px solid var(--line);color:var(--text-1);display:inline-flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap}
+.delete-tab-btn:hover{border-color:var(--brand);color:var(--brand);background:var(--brand-light)}
+.delete-tab-btn.active{background:linear-gradient(135deg,#3b82f6 0%,#1e40af 50%,#0891b2 100%);color:white;border-color:transparent;box-shadow:0 4px 12px -3px rgba(59,130,246,.4)}
+.delete-tab-btn.active:hover{color:white;background:linear-gradient(135deg,#2563eb 0%,#1e3a8a 50%,#0e7490 100%)}
+
+/* ===== FOOTER (watermark style, small) ===== */
+.app-footer{padding:18px 16px;text-align:center;background:transparent;margin-top:20px}
+.watermark{font-family:'Inter',sans-serif;font-size:11px;color:var(--text-3);
+  letter-spacing:1.5px;text-transform:uppercase;font-weight:500;opacity:.7}
+.watermark .sep{margin:0 4px;color:var(--line-2)}
+.watermark .name{color:var(--text-2);font-weight:600}
+
+/* ===== MOBILE NAV ===== */
+.nav-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.5);backdrop-filter:blur(2px);z-index:55;display:none}
+.nav-backdrop.active{display:block;animation:fadeIn .2s}
+.nav-close-mobile{position:absolute;top:14px;right:14px;background:none;border:none;
+  font-size:22px;color:var(--text-2);cursor:pointer;display:none;padding:6px;border-radius:7px}
+@media(max-width:768px){
+  .app-header{padding:10px 14px;gap:8px;justify-content:flex-start}
+  .app-header .brand{justify-content:flex-start}
+  .menu-toggle{display:flex;align-items:center;justify-content:center;position:relative;left:0}
+  .header-actions{position:relative;right:auto;margin-left:auto}
+  .app-nav{position:fixed;top:0;left:-100%;width:280px;height:100vh;flex-direction:column;
+    padding:70px 14px 14px;gap:3px;z-index:60;transition:left .3s;box-shadow:10px 0 30px -10px rgba(0,0,0,.3)}
+  .app-nav.open{left:0}
+  .nav-item{justify-content:flex-start;border-bottom:1px solid var(--line);padding:12px 12px;border-radius:0}
+  .nav-item.active{border-radius:7px;margin:2px 0;padding:12px}
+  .app-main{padding:12px}
+  .card{padding:12px}
+  /* Compact stat cards: 4 per row on mobile */
+  .stat-grid{grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+  .stat-card{padding:7px 8px;border-radius:8px}
+  .stat-label{font-size:8.5px;line-height:1.25;margin-bottom:1px}
+  .stat-value{font-size:13px}
+  .export-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .filter-row{grid-template-columns:1fr 1fr}
+  .modal{margin:0}
+  .toast-wrap{top:10px;right:10px;left:10px;max-width:none}
+  .form-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+  /* Manage page mobile: মাস+সাল এক লাইনে, লোড+সার্চ এক লাইনে পাশাপাশি */
+  #page-manage .filter-row{grid-template-columns:1fr 1fr}
+  #page-manage .filter-row > .btn{grid-column:1;justify-content:center}
+  #page-manage .manage-search-group{grid-column:2;margin:0}
+  #page-manage .manage-search-group .form-label{display:none}
+  #page-manage .manage-search-group .form-control{height:42px}
+  /* nav-close-mobile button on the right side of left drawer (top-right of drawer) */
+  .nav-close-mobile{right:14px;left:auto}
+}
+@media(max-width:480px){
+  .stat-grid{grid-template-columns:repeat(4,1fr);gap:5px}
+  .stat-card{padding:6px 7px}
+  .stat-label{font-size:8px}
+  .stat-value{font-size:12px}
+  .filter-row{grid-template-columns:1fr 1fr}
+  .auth-card{padding:24px 20px}
+  .auth-app-name{font-size:20px}
+  .export-grid{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr 1fr;gap:8px}
+}
+@media(max-width:360px){
+  .stat-grid{grid-template-columns:repeat(4,1fr);gap:4px}
+  .stat-card{padding:5px 6px}
+  .stat-value{font-size:11px}
+  .stat-label{font-size:7.5px}
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== AUTH PAGES ==================== -->
+<!-- ===== Initial loading splash (until auth state determined) ===== -->
+<div id="initialSplash" style="position:fixed;inset:0;background:radial-gradient(circle at 15% 20%,rgba(59,130,246,.35),transparent 45%),radial-gradient(circle at 85% 80%,rgba(14,165,233,.30),transparent 45%),linear-gradient(135deg,#0f172a 0%,#1e293b 35%,#0c4a6e 70%,#1e3a8a 100%);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:18px">
+  <div style="width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,#3b82f6 0%,#1e40af 50%,#0891b2 100%);display:flex;align-items:center;justify-content:center;font-size:28px;color:white;box-shadow:0 12px 28px -6px rgba(59,130,246,.5),0 6px 14px -4px rgba(30,64,175,.4),inset 0 2px 4px rgba(255,255,255,.4),inset 0 -2px 4px rgba(0,0,0,.15);animation:logoPulse 3s ease-in-out infinite">
+    <i class="bi bi-clipboard-data"></i>
+  </div>
+  <div class="spinner" style="width:32px;height:32px;border:3px solid rgba(255,255,255,.2);border-top-color:#60a5fa;border-radius:50%;animation:spin .8s linear infinite"></div>
+  <div style="color:rgba(255,255,255,.9);font-size:14px;font-weight:500;letter-spacing:.3px">ক্যান্টিন লোড হচ্ছে...</div>
+</div>
+
+<div id="authView" style="display:none">
+  <!-- ===== SIGN IN ===== -->
+  <div id="signinPage" class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <div class="auth-logo"><i class="bi bi-clipboard-data"></i></div>
+        <div class="auth-app-name">ক্যান্টিন</div><div style="font-size:12px;color:#64748b;margin-top:2px;font-weight:500;letter-spacing:.2px">মাসিক মিল হিসাব ব্যবস্থাপনা</div>
+      </div>
+      <div id="signinAlert"></div>
+      <form id="signinForm" autocomplete="off">
+        <div class="form-group">
+          <label class="form-label" for="signinEmail">
+            <i class="bi bi-person"></i> ইমেইল বা ইউজারনেম
+          </label>
+          <div class="input-group">
+            <input type="text" id="signinEmail" class="form-control"
+              placeholder="you@example.com অথবা username" required autocomplete="username"
+              list="savedUsernames" autocapitalize="off" spellcheck="false">
+            <datalist id="savedUsernames"></datalist>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="signinPassword">
+            <i class="bi bi-lock"></i> পাসওয়ার্ড
+          </label>
+          <div class="input-group">
+            <input type="password" id="signinPassword" class="form-control"
+              placeholder="••••••••" required autocomplete="new-password">
+            <button type="button" class="input-icon" data-target="signinPassword" aria-label="পাসওয়ার্ড দেখান">
+              <i class="bi bi-eye"></i>
+            </button>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block btn-lg">
+          <i class="bi bi-box-arrow-in-right"></i> সাইন ইন
+        </button>
+      </form>
+      <div class="auth-divider">অথবা</div>
+      <div class="auth-link">পাসওয়ার্ড ভুলে গেছেন? <a id="goForgot">পাসওয়ার্ড রিসেট করুন</a></div>
+      <div class="auth-link" style="margin-top:8px">নতুন ইউজার? <a id="goSignup">সাইন আপ করুন</a></div>
+    </div>
+    <footer class="auth-footer"><span class="watermark">Created by <span class="name">Mehedi Hasan</span></span></footer>
+  </div>
+
+  <!-- ===== SIGN UP ===== -->
+  <div id="signupPage" class="auth-wrap" style="display:none">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <div class="auth-logo"><i class="bi bi-person-plus"></i></div>
+        <div class="auth-app-name">সাইন আপ</div><div style="font-size:12px;color:#64748b;margin-top:2px;font-weight:500;letter-spacing:.2px">নতুন অ্যাকাউন্ট তৈরি করুন</div>
+      </div>
+      <div id="signupAlert"></div>
+      <form id="signupForm" autocomplete="off">
+        <div class="form-group">
+          <label class="form-label" for="signupName"><i class="bi bi-person"></i> পুরো নাম <span class="req">*</span></label>
+          <input type="text" id="signupName" class="form-control" placeholder="আপনার পুরো নাম" required autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="signupUsername"><i class="bi bi-at"></i> ইউজারনেম <span class="req">*</span></label>
+          <input type="text" id="signupUsername" class="form-control" placeholder="unique_username"
+            required minlength="3" pattern="[a-zA-Z0-9._-]+" autocomplete="off" autocapitalize="off" spellcheck="false">
+          <div style="font-size:11px;color:var(--text-3);margin-top:4px">শুধু ইংরেজি অক্ষর, সংখ্যা এবং . _ - ব্যবহার করুন</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="signupEmail"><i class="bi bi-envelope"></i> ইমেইল <span class="req">*</span></label>
+          <input type="email" id="signupEmail" class="form-control" placeholder="you@example.com" required autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="signupMobile"><i class="bi bi-phone"></i> মোবাইল নম্বর <span class="req">*</span></label>
+          <input type="tel" id="signupMobile" class="form-control" placeholder="01XXXXXXXXX" required pattern="[0-9+]{6,}" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="signupPassword"><i class="bi bi-lock"></i> পাসওয়ার্ড <span class="req">*</span></label>
+          <div class="input-group">
+            <input type="password" id="signupPassword" class="form-control" placeholder="কমপক্ষে ৬ অক্ষর" required minlength="6" autocomplete="new-password">
+            <button type="button" class="input-icon" data-target="signupPassword" aria-label="পাসওয়ার্ড দেখান"><i class="bi bi-eye"></i></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="signupConfirm"><i class="bi bi-shield-lock"></i> কনফার্ম পাসওয়ার্ড <span class="req">*</span></label>
+          <div class="input-group">
+            <input type="password" id="signupConfirm" class="form-control" placeholder="পাসওয়ার্ড পুনরায় লিখুন" required autocomplete="new-password">
+            <button type="button" class="input-icon" data-target="signupConfirm" aria-label="পাসওয়ার্ড দেখান"><i class="bi bi-eye"></i></button>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block btn-lg">
+          <i class="bi bi-person-plus-fill"></i> অ্যাকাউন্ট তৈরি করুন
+        </button>
+      </form>
+      <div class="auth-divider">অথবা</div>
+      <div class="auth-link">ইতিমধ্যে অ্যাকাউন্ট আছে? <a id="goSignin">সাইন ইন করুন</a></div>
+    </div>
+    <footer class="auth-footer"><span class="watermark">Created by <span class="name">Mehedi Hasan</span></span></footer>
+  </div>
+
+  <!-- ===== FORGOT PASSWORD ===== -->
+  <div id="forgotPage" class="auth-wrap" style="display:none">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <div class="auth-logo"><i class="bi bi-key"></i></div>
+        <div class="auth-app-name">পাসওয়ার্ড রিসেট</div><div style="font-size:12px;color:#64748b;margin-top:2px;font-weight:500;letter-spacing:.2px">রিসেট লিংক পেতে ইমেইল/ইউজারনেম দিন</div>
+      </div>
+      <div id="forgotAlert"></div>
+      <form id="forgotForm" autocomplete="off">
+        <div class="form-group">
+          <label class="form-label" for="forgotEmail"><i class="bi bi-envelope"></i> রেজিস্টার্ড ইমেইল বা ইউজারনেম <span class="req">*</span></label>
+          <input type="text" id="forgotEmail" class="form-control" placeholder="you@example.com অথবা username" required autocomplete="off" autocapitalize="off" spellcheck="false">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block btn-lg">
+          <i class="bi bi-send"></i> রিসেট লিংক পাঠান
+        </button>
+      </form>
+      <div class="auth-divider">অথবা</div>
+      <div class="auth-link"><a id="goSignin2">← সাইন ইন পেজে ফিরে যান</a></div>
+    </div>
+    <footer class="auth-footer"><span class="watermark">Created by <span class="name">Mehedi Hasan</span></span></footer>
+  </div>
+</div>
+
+<!-- ==================== MAIN APP ==================== -->
+<div id="appView" class="app">
+  <header class="app-header">
+    <button class="menu-toggle" id="menuToggle" aria-label="মেনু"><i class="bi bi-list"></i></button>
+    <div class="brand">
+      <div class="brand-logo"><i class="bi bi-clipboard-data"></i></div>
+      <div>
+        <div class="brand-name">ক্যান্টিন</div>
+        <div class="brand-tag">মাসিক মিল হিসাব ব্যবস্থাপনা</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-danger btn-sm" id="logoutBtn"><i class="bi bi-box-arrow-right"></i> লগআউট</button>
+    </div>
+  </header>
+
+  <div class="nav-backdrop" id="navBackdrop"></div>
+  <nav class="app-nav" id="appNav">
+    <button class="nav-close-mobile" id="navCloseMobile" aria-label="বন্ধ"><i class="bi bi-x-lg"></i></button>
+    <button class="nav-item active" data-page="dashboard"><i class="bi bi-grid-1x2"></i> ড্যাশবোর্ড</button>
+    <button class="nav-item" data-page="add"><i class="bi bi-plus-circle"></i> নতুন এন্ট্রি</button>
+    <button class="nav-item" data-page="manage"><i class="bi bi-table"></i> হিসাব তালিকা</button>
+    <button class="nav-item" data-page="rates"><i class="bi bi-tag"></i> মিল রেট</button>
+    <button class="nav-item" data-page="upload"><i class="bi bi-file-arrow-up"></i> xlsx আপলোড</button>
+    <button class="nav-item" data-page="export"><i class="bi bi-download"></i> ডাউনলোড</button>
+    <button class="nav-item" data-page="complaints"><i class="bi bi-exclamation-circle"></i> অভিযোগ</button>
+    <button class="nav-item" data-page="delete"><i class="bi bi-trash"></i> ডিলিট</button>
+  </nav>
+
+  <main class="app-main">
+    <!-- ===== DASHBOARD ===== -->
+    <section id="page-dashboard" class="page active">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="bi bi-calendar3"></i> মাস ও সাল নির্বাচন</div>
+        </div>
+        <div class="filter-row">
+          <div class="form-group">
+            <label class="form-label" for="dashMonth"><i class="bi bi-calendar-month"></i> মাস</label>
+            <select id="dashMonth" class="form-control"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="dashYear"><i class="bi bi-calendar3"></i> সাল</label>
+            <select id="dashYear" class="form-control"></select>
+          </div>
+          <button class="btn btn-primary" id="loadDashBtn"><i class="bi bi-arrow-repeat"></i> লোড করুন</button>
+        </div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-label">মোট ব্যক্তি</div><div class="stat-value" id="statPersons">0</div></div>
+        <div class="stat-card accent"><div class="stat-label">সকাল নাস্তা</div><div class="stat-value" id="statBreakfast">0</div></div>
+        <div class="stat-card success"><div class="stat-label">দুপুর মিল</div><div class="stat-value" id="statLunch">0</div></div>
+        <div class="stat-card warning"><div class="stat-label">অতিরিক্ত খরচ</div><div class="stat-value" id="statExtra">0</div></div>
+        <div class="stat-card danger"><div class="stat-label">মোট বিল</div><div class="stat-value" id="statTotalBill">0</div></div>
+        <div class="stat-card success"><div class="stat-label">মোট জমা</div><div class="stat-value" id="statTotalDeposit">0</div></div>
+        <div class="stat-card danger"><div class="stat-label">নিট বকেয়া</div><div class="stat-value" id="statNetDue">0</div></div>
+        <div class="stat-card accent"><div class="stat-label">পরবর্তী মাসের অগ্রিম জমা</div><div class="stat-value" id="statNextAdvance">0</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="bi bi-table"></i> মাসিক হিসাব সারাংশ</div>
+          <div class="card-actions">
+            <button class="btn btn-outline btn-sm" id="goToManage"><i class="bi bi-pencil"></i> এডিট/ডিলিট</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" id="dashTable">
+            <thead>
+              <tr>
+                <th>ক্রমিক</th><th>নাম</th><th>পদবী</th>
+                <th>সকাল</th><th>দুপুর</th><th>অতিরিক্ত</th>
+                <th>মোট বিল</th><th>মোট জমা</th><th>বকেয়া/অগ্রিম</th><th>পরবর্তী মাসের অগ্রিম জমা</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot></tfoot>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== ADD ENTRY ===== -->
+    <section id="page-add" class="page">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="bi bi-person-plus"></i> নতুন হিসাব এন্ট্রি</div>
+        </div>
+        <div class="filter-row" style="margin-bottom:14px">
+          <div class="form-group">
+            <label class="form-label" for="addMonth"><i class="bi bi-calendar-month"></i> মাস</label>
+            <select id="addMonth" class="form-control"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="addYear"><i class="bi bi-calendar3"></i> সাল</label>
+            <input type="number" id="addYear" class="form-control" placeholder="2026" min="2020" max="2099" list="availableYearsList" style="appearance:auto">
+            <datalist id="availableYearsList"></datalist>
+          </div>
+        </div>
+        <form id="addForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="fName"><i class="bi bi-person"></i> নাম <span class="req">*</span></label>
+              <input type="text" id="fName" class="form-control" placeholder="ব্যক্তির নাম" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="fDesignation"><i class="bi bi-briefcase"></i> পদবী</label>
+              <input type="text" id="fDesignation" class="form-control" placeholder="পদবী">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="fBreakfast"><i class="bi bi-cup-hot"></i> সকাল নাস্তা</label>
+              <input type="number" step="0.5" min="0" id="fBreakfast" class="form-control" placeholder="সংখ্যা" value="">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="fLunch"><i class="bi bi-egg-fried"></i> দুপুর মিল</label>
+              <input type="number" step="0.5" min="0" id="fLunch" class="form-control" placeholder="সংখ্যা" value="">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="fExtra"><i class="bi bi-cash-coin"></i> অতিরিক্ত খরচ</label>
+              <input type="number" step="0.01" min="0" id="fExtra" class="form-control" placeholder="টাকা" value="">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="fDeposit"><i class="bi bi-wallet2"></i> মোট জমা</label>
+              <input type="number" step="0.01" id="fDeposit" class="form-control" placeholder="টাকা" value="">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="fNextAdvance"><i class="bi bi-arrow-return-right"></i> পরবর্তী মাসের অগ্রিম জমা</label>
+              <input type="number" step="0.01" id="fNextAdvance" class="form-control" placeholder="টাকা" value="">
+            </div>
+          </div>
+          <div class="calc-preview" id="calcPreview">
+            <div class="calc-preview-row highlight"><span>মোট খরচ:</span><strong id="cpTotalExpense">0</strong></div>
+            <div class="calc-preview-row highlight"><span>মোট বিল:</span><strong id="cpTotalBill">0</strong></div>
+            <div class="calc-preview-row"><span>মোট জমা:</span><strong id="cpDeposit">0</strong></div>
+            <div class="calc-preview-row highlight" id="cpDueAdvanceRow"><span><span style="color:var(--danger)">বকেয়া</span>/<span style="color:var(--success)">অগ্রিম</span>:</span><strong id="cpDueAdvance">0</strong></div>
+            <div class="calc-preview-row highlight" id="cpNextAdvanceRow"><span>পরবর্তী মাসের অগ্রিম জমা:</span><strong id="cpNextAdvance">0</strong></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+            <button type="submit" class="btn btn-primary btn-lg"><i class="bi bi-save"></i> সেভ করুন</button>
+            <button type="button" class="btn btn-outline btn-lg" id="resetAddForm"><i class="bi bi-arrow-counterclockwise"></i> রিসেট</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ===== MANAGE ===== -->
+    <section id="page-manage" class="page">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="bi bi-table"></i> হিসাব তালিকা ও এডিট/ডিলিট</div>
+        </div>
+        <div class="filter-row">
+          <div class="form-group">
+            <label class="form-label" for="manageMonth"><i class="bi bi-calendar-month"></i> মাস</label>
+            <select id="manageMonth" class="form-control"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="manageYear"><i class="bi bi-calendar3"></i> সাল</label>
+            <select id="manageYear" class="form-control"></select>
+          </div>
+          <button class="btn btn-primary" id="loadManageBtn"><i class="bi bi-arrow-repeat"></i> লোড করুন</button>
+          <div class="form-group manage-search-group">
+            <label class="form-label" for="manageSearch"><i class="bi bi-search"></i> সার্চ</label>
+            <input type="text" id="manageSearch" class="form-control" placeholder="নাম দিয়ে সার্চ করুন..." style="height:42px">
+          </div>
+        </div>
+        <div class="table-wrap" style="margin-top:12px">
+          <table class="data-table" id="manageTable">
+            <thead>
+              <tr>
+                <th>ক্রমিক</th><th>নাম</th><th>পদবী</th>
+                <th>সকাল</th><th>দুপুর</th><th>অতিরিক্ত</th>
+                <th>মোট বিল</th><th>মোট জমা</th><th>বকেয়া/অগ্রিম</th><th>পরবর্তী মাসের অগ্রিম জমা</th>
+                <th style="text-align:center">অ্যাকশন</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot></tfoot>
+          </table>
+        </div>
+        <div id="manageEmpty" class="empty-state" style="display:none">
+          <i class="bi bi-inbox"></i>
+          <h3>কোনো ডাটা নেই</h3>
+          <p>এই মাস ও সালের জন্য কোনো রেকর্ড পাওয়া যায়নি।</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== RATES ===== -->
+    <section id="page-rates" class="page">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="bi bi-tag"></i> মিল রেট পরিবর্তন</div>
+        </div>
+        <div class="filter-row" style="margin-bottom:14px">
+          <div class="form-group">
+            <label class="form-label" for="rateMonth"><i class="bi bi-calendar-month"></i> মাস</label>
+            <select id="rateMonth" class="form-control"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="rateYear"><i class="bi bi-calendar3"></i> সাল</label>
+            <select id="rateYear" class="form-control"></select>
+          </div>
+          <button class="btn btn-outline" id="loadRateBtn"><i class="bi bi-arrow-repeat"></i> রেট লোড</button>
+          <button class="btn btn-primary" id="saveRateBtn"><i class="bi bi-save"></i> সেভ করুন</button>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="rateBreakfast"><i class="bi bi-cup-hot"></i> সকাল নাস্তা রেট (টাকা/মিল)</label>
+            <input type="number" step="0.01" min="0" id="rateBreakfast" class="form-control" placeholder="60">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="rateLunch"><i class="bi bi-egg-fried"></i> দুপুর মিল রেট (টাকা/মিল)</label>
+            <input type="number" step="0.01" min="0" id="rateLunch" class="form-control" placeholder="132">
+          </div>
+        </div>
+        <div class="alert alert-info"><i class="bi bi-info-circle"></i> রেট পরিবর্তন করলে সেই মাসের সকল হিসাব স্বয়ংক্রিয়ভাবে পুনরায় গণনা হবে।</div>
+      </div>
+    </section>
+
+    <!-- ===== UPLOAD XLSX ===== -->
+    <section id="page-upload" class="page">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="bi bi-file-arrow-up"></i> Excel ফাইল আপলোড করুন</div>
+        </div>
+        <div class="filter-row" style="margin-bottom:14px">
+          <div class="form-group">
+            <label class="form-label" for="upMonth"><i class="bi bi-calendar-month"></i> মাস</label>
+            <select id="upMonth" class="form-control"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="upYear"><i class="bi bi-calendar3"></i> সাল</label>
+            <input type="number" id="upYear" class="form-control" placeholder="2026" min="2020" max="2099" list="availableYearsList" style="appearance:auto">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="xlsxFile"><i class="bi bi-file-earmark-excel"></i> .xlsx ফাইল নির্বাচন করুন</label>
+          <input type="file" id="xlsxFile" accept=".xlsx,.xls" class="form-control" style="padding:9px">
+        </div>
+        <div class="alert alert-info">
+          <i class="bi bi-info-circle"></i>
+          <div>
+            <strong>আপলোডের নিয়ম:</strong><br>
+            • Excel ফাইলের প্রথম row-এ হেডার থাকতে হবে: <code>নাম</code>, <code>পদবী</code>, <code>সকাল নাস্তা</code>, <code>দুপুর মিল</code>, <code>অতিরিক্ত খরচ</code>, <code>মোট জমা</code>, <code>পরবর্তী মাসের অগ্রিম জমা</code><br>
+            • ডাটা ২য় row থেকে শুরু হবে<br>
+            • খালি row স্কিপ করা হবে<br>
+            • আগে মিল রেট ট্যাব থেকে ঐ মাসের রেট সেট করে নিন
+          </div>
+        </div>
+        <button class="btn btn-primary btn-lg" id="uploadBtn"><i class="bi bi-cloud-arrow-up"></i> আপলোড ও সেভ করুন</button>
+        <div id="uploadResult" style="margin-top:14px"></div>
+      </div>
+    </section>
+
+    <!-- ===== EXPORT ===== -->
+    <section id="page-export" class="page">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="bi bi-download"></i> ডাটা ডাউনলোড</div>
+        </div>
+        <div class="filter-row" style="margin-bottom:14px">
+          <div class="form-group">
+            <label class="form-label" for="expMonth"><i class="bi bi-calendar-month"></i> মাস</label>
+            <select id="expMonth" class="form-control"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="expYear"><i class="bi bi-calendar3"></i> সাল</label>
+            <select id="expYear" class="form-control"></select>
+          </div>
+        </div>
+        <div class="export-grid">
+          <button class="btn btn-danger btn-sm" id="dlPdfBtn"><i class="bi bi-download"></i> PDF ডাউনলোড</button>
+          <button class="btn btn-success btn-sm" id="dlXlsxBtn"><i class="bi bi-download"></i> XLSX ডাউনলোড</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== DELETE (was Admin) ===== -->
+    <section id="page-delete" class="page">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="bi bi-trash"></i> ডিলিট প্যানেল</div>
+        </div>
+        <div class="alert alert-warning"><i class="bi bi-exclamation-triangle"></i> এই অপশন থেকে ডাটা স্থায়ীভাবে ডিলিট হবে। কাজ শেষ হওয়ার পর আর ফিরিয়ে আনা যাবে না। তাই নিশ্চিত হয়ে ব্যবহার করুন।</div>
+
+        <div id="deleteLockPanel">
+          <div class="form-group">
+            <label class="form-label" for="deletePassword"><i class="bi bi-shield-lock"></i> আপনার লগইন পাসওয়ার্ড</label>
+            <div class="input-group">
+              <input type="password" id="deletePassword" class="form-control" placeholder="আপনার সাইন-ইন পাসওয়ার্ড দিন" autocomplete="off">
+              <button type="button" class="input-icon" data-target="deletePassword" aria-label="পাসওয়ার্ড দেখান"><i class="bi bi-eye"></i></button>
+            </div>
+            <div style="font-size:11px;color:var(--text-3);margin-top:5px">আপনি সাইন-ইন করতে যে পাসওয়ার্ড ব্যবহার করেছেন সেটি দিন</div>
+          </div>
+          <button class="btn btn-primary btn-lg" id="deleteUnlockBtn"><i class="bi bi-unlock"></i> ডিলিট মোড আনলক</button>
+        </div>
+
+        <div id="deletePanel" style="display:none">
+          <div class="alert alert-success"><i class="bi bi-check-circle"></i> ডিলিট মোড সক্রিয়। নিচের যেকোনো একটি মোড নির্বাচন করুন।</div>
+
+          <!-- Delete Mode Tabs -->
+          <div class="delete-tabs" style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
+            <button class="btn btn-outline delete-tab-btn active" data-mode="month" id="tabMonthMode" style="flex:1;min-width:140px">
+              <i class="bi bi-calendar-month"></i> মাস ও বছর অনুযায়ী
+            </button>
+            <button class="btn btn-outline delete-tab-btn" data-mode="year" id="tabYearMode" style="flex:1;min-width:140px">
+              <i class="bi bi-calendar-range"></i> সাল রেঞ্জ অনুযায়ী
+            </button>
+          </div>
+
+          <!-- Mode 1: Month + Year -->
+          <div id="deleteModeMonth" class="delete-mode-panel">
+            <div class="alert alert-info" style="margin-bottom:14px"><i class="bi bi-info-circle"></i> নির্দিষ্ট মাস ও বছরের সমস্ত রেকর্ড ও মিল রেট স্থায়ীভাবে ডিলিট হবে।</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="delMonth"><i class="bi bi-calendar-month"></i> মাস</label>
+                <select id="delMonth" class="form-control"></select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="delYear"><i class="bi bi-calendar3"></i> সাল</label>
+                <input type="number" id="delYear" class="form-control" placeholder="2025" min="2020" max="2099">
+              </div>
+            </div>
+            <div class="note">উদাহরণস্বরূপ: মাস <code>জানুয়ারি</code> এবং সাল <code>2025</code> দিলে শুধু ২০২৫ সালের জানুয়ারি মাসের সমস্ত ডাটা ডিলিট হবে।</div>
+            <button class="btn btn-danger btn-lg" id="confirmDelMonthBtn" style="margin-top:14px"><i class="bi bi-trash"></i> মাস ও বছর অনুযায়ী ডিলিট করুন</button>
+          </div>
+
+          <!-- Mode 2: Year Range -->
+          <div id="deleteModeYear" class="delete-mode-panel" style="display:none">
+            <div class="alert alert-info" style="margin-bottom:14px"><i class="bi bi-info-circle"></i> শুরু সাল থেকে শেষ সাল পর্যন্ত সকল মাসের সমস্ত রেকর্ড ও মিল রেট স্থায়ীভাবে ডিলিট হবে।</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="delFromYear"><i class="bi bi-calendar-minus"></i> শুরু সাল (From)</label>
+                <input type="number" id="delFromYear" class="form-control" placeholder="2024" min="2020" max="2099">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="delToYear"><i class="bi bi-calendar-minus"></i> শেষ সাল (To)</label>
+                <input type="number" id="delToYear" class="form-control" placeholder="2025" min="2020" max="2099">
+              </div>
+            </div>
+            <div class="note">উদাহরণস্বরূপ: শুরু সাল <code>2024</code> এবং শেষ সাল <code>2025</code> দিলে ২০২৪ ও ২০২৫ সালের সকল মাসের সম্পূর্ণ ডাটা ডিলিট হবে।</div>
+            <button class="btn btn-danger btn-lg" id="confirmDelBtn" style="margin-top:14px"><i class="bi bi-trash"></i> সাল রেঞ্জ অনুযায়ী ডিলিট করুন</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== অভিযোগ পেজ ===== -->
+    <section id="page-complaints" class="page">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="bi bi-exclamation-circle"></i> অভিযোগ তালিকা</div>
+          <button class="btn btn-outline btn-sm" id="refreshComplaintsBtn"><i class="bi bi-arrow-repeat"></i> রিফ্রেশ</button>
+        </div>
+        <div class="filter-row" style="margin-bottom:10px">
+          <div class="form-group" style="margin:0">
+            <label class="form-label" for="compMonth"><i class="bi bi-calendar-month"></i> মাস</label>
+            <select id="compMonth" class="form-control"></select>
+          </div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label" for="compYear"><i class="bi bi-calendar3"></i> সাল</label>
+            <select id="compYear" class="form-control"></select>
+          </div>
+          <button class="btn btn-primary" id="loadComplaintsBtn"><i class="bi bi-arrow-repeat"></i> লোড করুন</button>
+        </div>
+        <div style="margin-bottom:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <input type="text" id="compSearch" class="form-control" placeholder="নাম লিখে সার্চ করুন..." style="max-width:240px;flex:1">
+          <button class="btn btn-danger btn-sm" id="bulkDeleteCompBtn" style="display:none"><i class="bi bi-trash"></i> নির্বাচিত ডিলিট</button>
+        </div>
+        <div class="table-wrap" style="margin-top:12px">
+          <table class="data-table" id="complaintsTable">
+            <thead>
+              <tr>
+                <th style="width:30px"><input type="checkbox" id="compSelectAll"></th>
+                <th>ক্রমিক</th><th>নাম</th><th>অভিযোগ</th><th>তারিখ</th><th style="text-align:center">অ্যাকশন</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div id="complaintsEmpty" class="empty-state" style="display:none">
+          <i class="bi bi-inbox"></i>
+          <h3>কোনো অভিযোগ নেই</h3>
+          <p>এই মাস ও সালের জন্য কোনো অভিযোগ নেই।</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <span class="watermark">Created by <span class="name">Mehedi Hasan</span></span>
+  </footer>
+</div>
+
+<!-- ==================== MODALS ==================== -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title"><i class="bi bi-pencil-square"></i> হিসাব এডিট</div>
+      <button class="modal-close" data-close="editModal" aria-label="বন্ধ"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editId">
+      <div class="form-grid">
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label" for="eName"><i class="bi bi-person"></i> নাম <span class="req">*</span></label>
+          <input type="text" id="eName" class="form-control" required>
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label" for="eDesignation"><i class="bi bi-briefcase"></i> পদবী</label>
+          <input type="text" id="eDesignation" class="form-control">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="eBreakfast"><i class="bi bi-cup-hot"></i> সকাল নাস্তা</label>
+          <input type="number" step="0.5" min="0" id="eBreakfast" class="form-control">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="eLunch"><i class="bi bi-egg-fried"></i> দুপুর মিল</label>
+          <input type="number" step="0.5" min="0" id="eLunch" class="form-control">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="eExtra"><i class="bi bi-cash-coin"></i> অতিরিক্ত খরচ</label>
+          <input type="number" step="0.01" id="eExtra" class="form-control">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="eDeposit"><i class="bi bi-wallet2"></i> মোট জমা</label>
+          <input type="number" step="0.01" id="eDeposit" class="form-control">
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label" for="eNextAdvance"><i class="bi bi-arrow-return-right"></i> পরবর্তী মাসের অগ্রিম জমা</label>
+          <input type="number" step="0.01" id="eNextAdvance" class="form-control">
+        </div>
+      </div>
+      <div class="calc-preview" id="editCalcPreview" style="margin-top:14px">
+        <div class="calc-preview-row highlight"><span>মোট বিল:</span><strong id="epTotalBill">0</strong></div>
+        <div class="calc-preview-row highlight" id="epDueAdvanceRow"><span>বকেয়া / অগ্রিম:</span><strong id="epDueAdvance">0</strong></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" data-close="editModal">বাতিল</button>
+      <button class="btn btn-primary" id="saveEditBtn"><i class="bi bi-save"></i> সেভ করুন</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-header">
+      <div class="modal-title" id="confirmTitle"><i class="bi bi-exclamation-triangle"></i> নিশ্চিত করুন</div>
+      <button class="modal-close" data-close="confirmModal" aria-label="বন্ধ"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="modal-body">
+      <p id="confirmMessage" style="font-size:13.5px;color:var(--text-1);line-height:1.7"></p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" data-close="confirmModal">বাতিল</button>
+      <button class="btn btn-danger" id="confirmYesBtn"><i class="bi bi-trash"></i> ডিলিট করুন</button>
+    </div>
+  </div>
+</div>
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-text" id="loadingText">লোড হচ্ছে...</div>
+</div>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+  sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile,
+  setPersistence, browserSessionPersistence, browserLocalPersistence, inMemoryPersistence
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  getFirestore, collection, doc, addDoc, setDoc, getDoc, getDocs,
+  deleteDoc, query, where, writeBatch, updateDoc, onSnapshot,
+  getDocFromServer, getDocsFromServer, initializeFirestore, memoryLocalCache
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// ===== FIREBASE CONFIG (বেকড ইন) =====
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCJZ3chRcHhO86cVWIYGIGcTQNshCuBLbE",
+  authDomain: "canteen-5f945.firebaseapp.com",
+  projectId: "canteen-5f945",
+  storageBucket: "canteen-5f945.firebasestorage.app",
+  messagingSenderId: "105675976825",
+  appId: "1:105675976825:web:b39e5c1a67b79f360724a8"
+};
+const DEFAULT_BREAKFAST_RATE = 60;
+const DEFAULT_LUNCH_RATE = 132;
+
+let app, auth, db;
+let firebaseReady = false;
+let isInitializing = false;
+let cachedRecords = []; // dashboard cache for fast load
+let cachedRates = null;
+let cachedMonth = null, cachedYear = null;
+
+const MONTHS_BN = ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+const MONTHS_EN = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function showToast(message, type='info', duration=3000){
+  const wrap = document.getElementById('toastWrap');
+  if(!wrap) return;
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  const icons = {success:'bi-check-circle-fill',error:'bi-x-circle-fill',warning:'bi-exclamation-triangle-fill',info:'bi-info-circle-fill'};
+  t.innerHTML = `<i class="bi ${icons[type]||icons.info}"></i><span>${message}</span>`;
+  wrap.appendChild(t);
+  setTimeout(()=>{ t.style.animation='fadeOut .3s forwards'; setTimeout(()=>t.remove(),300); }, duration);
+}
+function showLoading(text='লোড হচ্ছে...'){
+  document.getElementById('loadingText').textContent = text;
+  document.getElementById('loadingOverlay').classList.add('active');
+}
+function hideLoading(){ document.getElementById('loadingOverlay').classList.remove('active'); }
+function fmt(n){
+  if(n === null || n === undefined || n === '' || isNaN(n)) return '0';
+  return Number(n).toLocaleString('en-IN', {maximumFractionDigits:2});
+}
+function currentBnMonth(){ return new Date().getMonth(); }
+function currentBnYear(){ return new Date().getFullYear(); }
+function getMonthLabel(idx){ return MONTHS_BN[idx] || ''; }
+
+// ===== Calculation =====
+function calcTotalBill(bf, ln, ex, bRate, lRate){
+  return (Number(bf)||0)*(Number(bRate)||0) + (Number(ln)||0)*(Number(lRate)||0) + (Number(ex)||0);
+}
+function calcDueAdvance(dep, bill){ return (Number(dep)||0) - (Number(bill)||0); }
+// পরবর্তী মাসের অগ্রিম জমা: ইউজার ম্যানুয়ালি যা দেবে — সরাসরি সেই মান
+// খালি থাকলে null — অন্য কোনো সেলের সাথে যোগ হবে না
+function calcNextAdvance(dueAdv, userProvided){
+  if(userProvided !== '' && userProvided !== null && userProvided !== undefined && !isNaN(userProvided)){
+    return Number(userProvided);
+  }
+  return null;
+}
+
+// ===== Firebase init =====
+// ===== Auto-logout flag =====
+// When 10-min inactivity triggers auto-logout, we set this flag in localStorage.
+// On next page load (any tab/window), if flag is set, we force Firebase signOut
+// and clear the flag — so user must re-enter credentials.
+const AUTO_LOGOUT_FLAG = 'canteen_auto_logged_out';
+function setAutoLoggedOutFlag(){
+  try{ localStorage.setItem(AUTO_LOGOUT_FLAG, '1'); }catch(e){}
+}
+function clearAutoLoggedOutFlag(){
+  try{ localStorage.removeItem(AUTO_LOGOUT_FLAG); }catch(e){}
+}
+function isAutoLoggedOutFlagSet(){
+  try{ return localStorage.getItem(AUTO_LOGOUT_FLAG) === '1'; }catch(e){ return false; }
+}
+
+function initFirebase(){
+  if(isInitializing) return;
+  isInitializing = true;
+  try{
+    // CRITICAL: Force clear ALL old IndexedDB databases from previous versions.
+    // This runs BEFORE Firebase init, so it won't conflict.
+    // Use a version flag to ensure it only runs once per version.
+    const CACHE_VERSION = 'v5_rest_api_list';
+    const storedVersion = localStorage.getItem('canteen_cache_version');
+    if(storedVersion !== CACHE_VERSION){
+      console.log('[Firebase] Cache version mismatch — clearing all old IndexedDB databases');
+      try{
+        if(indexedDB.databases){
+          indexedDB.databases().then(dbs=>{
+            const deletePromises = dbs.map(dbInfo=>{
+              if(dbInfo.name){
+                return new Promise((resolve)=>{
+                  const req = indexedDB.deleteDatabase(dbInfo.name);
+                  req.onsuccess = ()=>{ console.log('[Firebase] Deleted DB:', dbInfo.name); resolve(); };
+                  req.onerror = ()=> resolve();
+                  req.onblocked = ()=>{ console.warn('[Firebase] DB blocked:', dbInfo.name); resolve(); };
+                });
+              }
+              return Promise.resolve();
+            });
+            Promise.all(deletePromises).then(()=>{
+              localStorage.setItem('canteen_cache_version', CACHE_VERSION);
+              console.log('[Firebase] All old DBs cleared, version flag set');
+            });
+          }).catch(()=>{ localStorage.setItem('canteen_cache_version', CACHE_VERSION); });
+        }else{
+          localStorage.setItem('canteen_cache_version', CACHE_VERSION);
+        }
+      }catch(e){ localStorage.setItem('canteen_cache_version', CACHE_VERSION); }
+    }
+
+    app = initializeApp(FIREBASE_CONFIG);
+    auth = getAuth(app);
+    // CRITICAL: Use memoryLocalCache to disable IndexedDB persistence entirely.
+    // This means NO offline cache — all reads/writes go directly to server.
+    // deleteDoc will delete from server immediately (no offline queue).
+    // getDocs will always fetch from server (no stale cache).
+    // This is the standard pattern for a real-time web app.
+    try{
+      db = initializeFirestore(app, {
+        localCache: memoryLocalCache({})
+      });
+      console.log('[Firebase] ✓ memoryLocalCache initialized — NO IndexedDB persistence');
+    }catch(cacheErr){
+      console.warn('[Firebase] initializeFirestore failed, using default getFirestore:', cacheErr.message);
+      db = getFirestore(app);
+    }
+    firebaseReady = true;
+    // Use browserLocalPersistence — user stays logged in across refresh, browser close, and other tabs.
+    // ONLY when 10-min inactivity triggers auto-logout, we set a flag and force signOut on next load.
+    setPersistence(auth, browserLocalPersistence).then(()=>{
+      // Check 1: Previous auto-logout flag set?
+      if(isAutoLoggedOutFlagSet()){
+        console.log('[Auth] Previous auto-logout detected — forcing signOut');
+        clearAutoLoggedOutFlag();
+        signOut(auth).then(()=> setupAuthStateListener()).catch(()=> setupAuthStateListener());
+      }
+      // Check 2: Last activity > 10 min ago? (browser was closed / inactive)
+      else if(isInactiveTooLong()){
+        console.log('[Auth] Inactive > 10 min — forcing signOut');
+        setAutoLoggedOutFlag();
+        signOut(auth).then(()=> setupAuthStateListener()).catch(()=> setupAuthStateListener());
+      }
+      else{
+        setupAuthStateListener();
+      }
+    }).catch(e=>{
+      console.warn('setPersistence failed, fallback:', e);
+      setupAuthStateListener();
+    });
+  }catch(e){
+    console.error("Firebase init error:", e);
+    showToast('Firebase সংযোগে ত্রুটি: ' + e.message, 'error');
+  }
+}
+
+// ===== Saved Usernames (autocomplete) =====
+function saveUsernameToLocal(username){
+  try{
+    let list = JSON.parse(localStorage.getItem('savedUsernames') || '[]');
+    if(!list.includes(username)){ list.unshift(username); list = list.slice(0, 10); localStorage.setItem('savedUsernames', JSON.stringify(list)); }
+  }catch(e){}
+}
+function loadSavedUsernames(){
+  const datalist = document.getElementById('savedUsernames');
+  if(!datalist) return;
+  try{
+    const list = JSON.parse(localStorage.getItem('savedUsernames') || '[]');
+    datalist.innerHTML = '';
+    list.forEach(u=>{ const opt = document.createElement('option'); opt.value = u; datalist.appendChild(opt); });
+  }catch(e){}
+}
+
+// ===== Auto-logout (10 min inactivity) =====
+// ১০ মিনিট নিষ্ক্রিয় থাকলে সরাসরি লগআউট (কোনো কাউন্টডাউন নয়)
+// ব্রাউজার বন্ধ থাকলেও পরবর্তী লোডে চেক হবে
+const AUTO_LOGOUT_MS = 10 * 60 * 1000;
+const LAST_ACTIVITY_KEY = 'canteen_last_activity';
+let inactivityTimer = null;
+
+// প্রতিটা activity তে timestamp সেভ করি localStorage এ (যাতে ব্রাউজার বন্ধেও কাজ করে)
+function saveLastActivity(){
+  try{ localStorage.setItem(LAST_ACTIVITY_KEY, Date.now().toString()); }catch(e){}
+}
+function getLastActivity(){
+  try{ return parseInt(localStorage.getItem(LAST_ACTIVITY_KEY) || '0'); }catch(e){ return 0; }
+}
+function isInactiveTooLong(){
+  const last = getLastActivity();
+  if(last === 0) return false;
+  return (Date.now() - last) > AUTO_LOGOUT_MS;
+}
+
+function resetInactivityTimer(){
+  if(inactivityTimer) clearTimeout(inactivityTimer);
+  if(!auth || !auth.currentUser) return;
+  saveLastActivity();
+  // ১০ মিনিট পর সরাসরি লগআউট (কাউন্টডাউন নয়)
+  inactivityTimer = setTimeout(()=> doAutoLogout(), AUTO_LOGOUT_MS);
+}
+
+async function doAutoLogout(){
+  try{
+    setAutoLoggedOutFlag();
+    await signOut(auth);
+    showToast('১০ মিনিট ইনঅ্যাক্টিভ থাকায় অটো-লগআউট হয়েছে। পুনরায় লগইন করুন।', 'warning', 5000);
+  }catch(e){}
+}
+
+// ===== Cross-tab sync (BroadcastChannel) =====
+// Note: This sync is ONLY for data changes (so other tabs refresh their tables).
+// We do NOT broadcast auth state changes — each tab maintains its own session
+// via sessionStorage (which is per-tab). New tabs/windows will start at login page.
+let bc = null;
+function setupCrossTabSync(){
+  try{
+    if('BroadcastChannel' in window){
+      bc = new BroadcastChannel('canteen_hisab_sync');
+      bc.onmessage = (ev)=>{
+        if(ev.data && ev.data.type === 'data_changed'){
+          // Refresh current page if visible
+          if(!document.hidden && auth && auth.currentUser){
+            const activePage = document.querySelector('.nav-item.active');
+            if(activePage){
+              const page = activePage.dataset.page;
+              if(page === 'dashboard') loadDashboard(true);
+              if(page === 'manage') loadManage(true);
+              if(page === 'rates') loadRate(true);
+            }
+          }
+        }
+        // NOTE: We intentionally DO NOT handle 'auth_changed' broadcast.
+        // Each tab has its own sessionStorage-based session, so logging out
+        // in one tab does NOT log out other tabs (until their own session expires).
+      };
+    }
+  }catch(e){}
+  // Storage event fallback (older browsers) — only for data changes
+  window.addEventListener('storage', (e)=>{
+    if(e.key === 'canteen_hisab_data_changed' && !document.hidden && auth && auth.currentUser){
+      const activePage = document.querySelector('.nav-item.active');
+      if(activePage){
+        const page = activePage.dataset.page;
+        if(page === 'dashboard') loadDashboard(true);
+        if(page === 'manage') loadManage(true);
+      }
+    }
+  });
+}
+function broadcastDataChange(){
+  try{
+    if(bc) bc.postMessage({type:'data_changed'});
+    localStorage.setItem('canteen_hisab_data_changed', Date.now().toString());
+  }catch(e){}
+}
+
+// ===== Auth state listener =====
+function hideInitialSplash(){
+  const splash = document.getElementById('initialSplash');
+  if(splash){ splash.style.display = 'none'; }
+}
+function setupAuthStateListener(){
+  onAuthStateChanged(auth, async (user)=>{
+    // Hide splash as soon as auth state is determined (first callback)
+    hideInitialSplash();
+    if(user){
+      document.getElementById('authView').style.display = 'none';
+      document.getElementById('appView').classList.add('active');
+      // Step 1: Instant load from cache (no spinner) — uses existing cache if available
+      if(allRecordsCache.length === 0){
+        // First load — fetch from server quickly (no spinner shown)
+        await populateAvailableYearsAndMonths();
+      }else{
+        // Use existing cache for instant render, then refresh in background
+        populateAllMonthDropdowns();
+        populateYearDropdowns();
+        autoSelectFirstAvailable();
+        await refreshDashboardFromCache();
+        // Background refresh from server (silent)
+        populateAvailableYearsAndMonths().then(()=>{
+          populateAllMonthDropdowns();
+          populateYearDropdowns();
+          autoSelectFirstAvailable();
+          return refreshDashboardFromCache();
+        });
+        return; // Skip the loading spinner path below
+      }
+      populateAllMonthDropdowns();
+      populateYearDropdowns();
+      autoSelectFirstAvailable();
+      // Load dashboard from cache (instant — no spinner)
+      await refreshDashboardFromCache();
+      // Background refresh from server (silent — no spinner)
+      setTimeout(async ()=>{
+        try{
+          await loadDashboard(true);
+        }catch(e){ console.warn('[Auth] Background refresh failed:', e.message); }
+      }, 100);
+      resetInactivityTimer();
+
+      // 🔥 REAL-TIME LISTENER for records — যেকোনো পেজ থেকে এন্ট্রি/ডিলিট/এডিট করলে সাথে সাথে আপডেট
+      try {
+        onSnapshot(collection(db, 'records'), (snap) => {
+          // Preserve temp records (optimistic UI) that haven't synced yet
+          const tempRecords = allRecordsCache.filter(r => r.id && r.id.startsWith('temp_'));
+          // Rebuild cache from server
+          allRecordsCache = [];
+          availableYears = new Set();
+          availableMonths = new Set();
+          yearMonthMap = {};
+          snap.forEach(d => {
+            const r = d.data();
+            allRecordsCache.push({id: d.id, ...r});
+            if(r.year !== undefined && r.year !== null){
+              availableYears.add(r.year);
+              if(r.month !== undefined && r.month !== null){
+                availableMonths.add(r.month);
+                if(!yearMonthMap[r.year]) yearMonthMap[r.year] = new Set();
+                yearMonthMap[r.year].add(r.month);
+              }
+            }
+          });
+          // Re-add temp records that haven't been replaced by real ones yet
+          // (they will be removed once the real record with same content arrives)
+          tempRecords.forEach(tr => {
+            // Check if this temp record's data is already in cache (by matching all fields except id)
+            const exists = allRecordsCache.some(r => r.id !== tr.id && r.name === tr.name && r.year === tr.year && r.month === tr.month && r.serial === tr.serial);
+            if(!exists){
+              allRecordsCache.push(tr);
+            }
+          });
+          availableYears.add(currentBnYear());
+          availableMonths.add(currentBnMonth());
+          if(!yearMonthMap[currentBnYear()]) yearMonthMap[currentBnYear()] = new Set();
+          yearMonthMap[currentBnYear()].add(currentBnMonth());
+          console.log('[Real-time] Records updated:', allRecordsCache.length, 'docs');
+
+          // Update dropdowns silently
+          populateAllMonthDropdowns();
+          populateYearDropdowns();
+
+          // Refresh whatever page is currently active (no spinner)
+          const activePage = document.querySelector('.nav-item.active');
+          if(activePage){
+            const page = activePage.dataset.page;
+            if(page === 'dashboard') refreshDashboardFromCache();
+            if(page === 'manage') refreshManageFromCache();
+          }
+        }, (err) => {
+          console.warn('Records real-time listener error:', err.message);
+        });
+      } catch(e) {
+        console.warn('Records onSnapshot setup failed:', e.message);
+      }
+
+      // 🔥 REAL-TIME LISTENER for complaints (admin পেজে)
+      // যখন meal-summary থেকে নতুন অভিযোগ আসবে বা admin solve করবে — সাথে সাথে আপডেট
+      try {
+        onSnapshot(collection(db, 'complaints'), (snap) => {
+          allComplaintsCache = [];
+          snap.forEach(d => {
+            allComplaintsCache.push({id: d.id, ...d.data()});
+          });
+          console.log('[Real-time] Complaints updated:', allComplaintsCache.length);
+          // যদি অভিযোগ পেজ active থাকে, টেবিল রিফ্রেশ করো
+          const compPage = document.getElementById('page-complaints');
+          if(compPage && compPage.classList.contains('active')){
+            renderComplaintsTable();
+          }
+        }, (err) => {
+          console.warn('Complaints real-time listener error:', err.message);
+        });
+      } catch(e) {
+        console.warn('onSnapshot setup failed:', e.message);
+      }
+    }else{
+      document.getElementById('appView').classList.remove('active');
+      document.getElementById('authView').style.display = 'block';
+      showAuthPage('signinPage');
+      // Clear ALL auth form fields
+      ['signinEmail','signinPassword','signupName','signupUsername','signupEmail','signupMobile','signupPassword','signupConfirm','forgotEmail','deletePassword'].forEach(id=>{
+        const el = document.getElementById(id);
+        if(el) el.value = '';
+      });
+      loadSavedUsernames();
+    }
+  });
+}
+
+// ===== Available Years/Months (from actual data) =====
+let availableYears = new Set();
+let availableMonths = new Set();
+let yearMonthMap = {};  // {year: Set of months with data}
+let allRecordsCache = [];  // cache of all records to avoid duplicate queries
+
+async function populateAvailableYearsAndMonths(){
+  availableYears = new Set();
+  availableMonths = new Set();
+  yearMonthMap = {};
+  allRecordsCache = [];
+  try{
+    console.log('[populateAvailableYearsAndMonths] Fetching records from SERVER...');
+    // Force server fetch to bypass any local cache
+    const snap = await getDocsFromServer(collection(db, 'records'));
+    console.log('[populateAvailableYearsAndMonths] Records fetched:', snap.size, 'documents');
+    snap.forEach(d=>{
+      const r = d.data();
+      allRecordsCache.push({id: d.id, ...r});
+      if(r.year !== undefined && r.year !== null){
+        availableYears.add(r.year);
+        if(r.month !== undefined && r.month !== null){
+          availableMonths.add(r.month);
+          if(!yearMonthMap[r.year]) yearMonthMap[r.year] = new Set();
+          yearMonthMap[r.year].add(r.month);
+        }
+      }
+    });
+    // Also include mealRates (force server)
+    const rateSnap = await getDocsFromServer(collection(db, 'mealRates'));
+    rateSnap.forEach(d=>{
+      const parts = d.id.split('_');
+      if(parts.length === 2){
+        const yr = parseInt(parts[0]);
+        const mo = parseInt(parts[1]);
+        if(!isNaN(yr) && !isNaN(mo)){
+          availableYears.add(yr);
+          availableMonths.add(mo);
+          if(!yearMonthMap[yr]) yearMonthMap[yr] = new Set();
+          yearMonthMap[yr].add(mo);
+        }
+      }
+    });
+    // Always include current year/month
+    availableYears.add(currentBnYear());
+    availableMonths.add(currentBnMonth());
+    if(!yearMonthMap[currentBnYear()]) yearMonthMap[currentBnYear()] = new Set();
+    yearMonthMap[currentBnYear()].add(currentBnMonth());
+    console.log('[populateAvailableYearsAndMonths] Years:', Array.from(availableYears).sort());
+  }catch(e){
+    console.error('[populateAvailableYearsAndMonths] Failed:', e);
+    availableYears.add(currentBnYear());
+    availableMonths.add(currentBnMonth());
+    if(!yearMonthMap[currentBnYear()]) yearMonthMap[currentBnYear()] = new Set();
+    yearMonthMap[currentBnYear()].add(currentBnMonth());
+  }
+}
+
+function populateAllMonthDropdowns(){
+  const cm = currentBnMonth();
+  ['dashMonth','addMonth','manageMonth','rateMonth','upMonth','expMonth'].forEach(id=>{
+    const sel = document.getElementById(id);
+    if(!sel) return;
+    const current = sel.value;
+    sel.innerHTML = '';
+    MONTHS_BN.forEach((m,i)=>{
+      const opt = document.createElement('option');
+      opt.value = i; opt.textContent = m;
+      if(i === cm) opt.selected = true;
+      sel.appendChild(opt);
+    });
+    if(current !== '') sel.value = current;
+  });
+}
+
+function populateYearDropdowns(){
+  const cy = currentBnYear();
+  const sortedYears = Array.from(availableYears).sort((a,b)=>a-b);
+  if(!sortedYears.includes(cy)) sortedYears.push(cy);
+  // For dropdown-based selectors (dashYear, manageYear, rateYear, expYear)
+  ['dashYear','manageYear','rateYear','expYear'].forEach(id=>{
+    const sel = document.getElementById(id);
+    if(!sel) return;
+    const current = sel.value;
+    sel.innerHTML = '';
+    sortedYears.forEach(y=>{
+      const opt = document.createElement('option');
+      opt.value = y; opt.textContent = y;
+      sel.appendChild(opt);
+    });
+    if(current && sortedYears.includes(parseInt(current))) sel.value = current;
+    else if(id === 'dashYear') sel.value = sortedYears[sortedYears.length - 1];
+    else sel.value = cy;
+  });
+  // For addYear & upYear — these are <input type="number"> with datalist
+  // Populate the datalist with available years (user can also type manually)
+  const datalist = document.getElementById('availableYearsList');
+  if(datalist){
+    datalist.innerHTML = '';
+    sortedYears.forEach(y=>{
+      const opt = document.createElement('option');
+      opt.value = y;
+      datalist.appendChild(opt);
+    });
+  }
+  // Set default value for upYear if empty
+  const upYearEl = document.getElementById('upYear');
+  if(upYearEl && (!upYearEl.value || upYearEl.value === '')){
+    upYearEl.value = cy;
+  }
+}
+
+function populateMonthDropdowns(){
+  const cm = currentBnMonth();
+  ['dashMonth','addMonth','manageMonth','rateMonth','upMonth','expMonth'].forEach(id=>{
+    const sel = document.getElementById(id);
+    if(!sel) return;
+    const current = sel.value;
+    if(sel.children.length === 0){
+      MONTHS_BN.forEach((m,i)=>{
+        const opt = document.createElement('option');
+        opt.value = i; opt.textContent = m;
+        sel.appendChild(opt);
+      });
+    }
+    if(current !== '' && !isNaN(parseInt(current))) sel.value = current;
+    else sel.value = cm;
+  });
+}
+
+function autoSelectFirstAvailable(){
+  // Add page: current month + current year (running month/year)
+  const cm = currentBnMonth();
+  const cy = currentBnYear();
+  const addMonthEl = document.getElementById('addMonth');
+  const addYearEl = document.getElementById('addYear');
+  if(addMonthEl) addMonthEl.value = cm;
+  if(addYearEl) addYearEl.value = cy;
+  // Upload page: same defaults
+  const upMonthEl = document.getElementById('upMonth');
+  const upYearEl = document.getElementById('upYear');
+  if(upMonthEl) upMonthEl.value = cm;
+  if(upYearEl) upYearEl.value = cy;
+  // Dashboard & Manage: select most recent year+month that has actual data
+  const sortedYears = Array.from(availableYears).sort((a,b)=>b-a);
+  console.log('[autoSelectFirstAvailable] sortedYears:', sortedYears);
+  console.log('[autoSelectFirstAvailable] yearMonthMap:', yearMonthMap);
+  if(sortedYears.length > 0){
+    const mostRecentYear = sortedYears[0];
+    const ds = document.getElementById('dashYear');
+    const ms = document.getElementById('manageYear');
+    if(ds) ds.value = mostRecentYear;
+    if(ms) ms.value = mostRecentYear;
+    // Find most recent month for that year that has data
+    const monthsForYear = yearMonthMap[mostRecentYear];
+    if(monthsForYear && monthsForYear.size > 0){
+      const sortedMonths = Array.from(monthsForYear).sort((a,b)=>b-a);
+      const mostRecentMonth = sortedMonths[0];
+      console.log('[autoSelectFirstAvailable] Most recent year:', mostRecentYear, 'month:', mostRecentMonth);
+      const dm = document.getElementById('dashMonth');
+      const mm = document.getElementById('manageMonth');
+      if(dm) dm.value = mostRecentMonth;
+      if(mm) mm.value = mostRecentMonth;
+    }else{
+      console.log('[autoSelectFirstAvailable] No months found for year', mostRecentYear, '— using current month');
+      const dm = document.getElementById('dashMonth');
+      const mm = document.getElementById('manageMonth');
+      if(dm) dm.value = cm;
+      if(mm) mm.value = cm;
+    }
+  }
+}
+
+// ===== Auth UI navigation =====
+function showAuthPage(pageId){
+  ['signinPage','signupPage','forgotPage'].forEach(p=>{
+    const el = document.getElementById(p);
+    if(el) el.style.display = 'none';
+  });
+  const target = document.getElementById(pageId);
+  if(target) target.style.display = 'flex';
+  ['signinAlert','signupAlert','forgotAlert'].forEach(a=>{
+    const el = document.getElementById(a);
+    if(el) el.innerHTML = '';
+  });
+}
+
+// ===== Get Rates =====
+async function getRates(year, month){
+  try{
+    const snap = await getDoc(doc(db, 'mealRates', `${year}_${month}`));
+    if(snap.exists()) return {breakfast: snap.data().breakfastRate, lunch: snap.data().lunchRate};
+  }catch(e){}
+  return {breakfast: DEFAULT_BREAKFAST_RATE, lunch: DEFAULT_LUNCH_RATE};
+}
+
+let currentRates = {breakfast: DEFAULT_BREAKFAST_RATE, lunch: DEFAULT_LUNCH_RATE};
+
+// ===== Dashboard - explicit load via button =====
+async function loadDashboard(silent=false){
+  if(!firebaseReady){ console.log('[loadDashboard] Firebase not ready'); return; }
+  const m = parseInt(document.getElementById('dashMonth').value);
+  const y = parseInt(document.getElementById('dashYear').value);
+  console.log('[loadDashboard] Loading for year:', y, 'month:', m, 'silent:', silent);
+  if(isNaN(m) || isNaN(y)){ return; }
+  if(!silent) showLoading('হিসাব লোড হচ্ছে...');
+  try{
+    const rates = await getRates(y, m);
+    currentRates = rates;
+    let records = [];
+    // Use cache ONLY for silent refreshes (real-time / cross-tab updates)
+    // For explicit loads (button click, after delete), use REST API list (no filter)
+    if(silent && allRecordsCache.length > 0){
+      console.log('[loadDashboard] Using cached records:', allRecordsCache.length);
+      records = allRecordsCache.filter(r => Number(r.year) === y && Number(r.month) === m);
+    } else {
+      console.log('[loadDashboard] Fetching via REST API (guaranteed fresh)');
+      const user = auth.currentUser;
+      if(!user){
+        throw new Error('অনুমতি নেই — আবার লগইন করুন');
+      }
+      const idToken = await user.getIdToken();
+      const projectId = 'canteen-5f945';
+      // Simple list — no filter (Firestore REST filter syntax is unreliable)
+      const listUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/records?pageSize=1000`;
+      console.log('[loadDashboard] REST URL:', listUrl);
+      const restResp = await fetch(listUrl, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${idToken}`,
+          'Content-Type': 'application/json'
+        },
+        cache: 'no-store'
+      });
+      if(restResp.ok){
+        const data = await restResp.json();
+        const docs = data.documents || [];
+        console.log('[loadDashboard] REST API returned', docs.length, 'documents');
+        // Filter on client side
+        allRecordsCache = []; // Clear cache completely — rebuild from fresh data
+        docs.forEach(doc=>{
+          if(doc.fields){
+            const r = {};
+            Object.keys(doc.fields).forEach(k=>{
+              const v = doc.fields[k];
+              if(v.integerValue !== undefined) r[k] = parseInt(v.integerValue);
+              else if(v.doubleValue !== undefined) r[k] = parseFloat(v.doubleValue);
+              else if(v.stringValue !== undefined) r[k] = v.stringValue;
+              else if(v.nullValue !== undefined) r[k] = null;
+              else if(v.timestampValue !== undefined) r[k] = v.timestampValue;
+              else if(v.booleanValue !== undefined) r[k] = v.booleanValue;
+            });
+            r.id = doc.name.split('/').pop();
+            allRecordsCache.push(r);
+            // Filter by year + month for current view
+            if(Number(r.year) === y && Number(r.month) === m){
+              records.push(r);
+            }
+          }
+        });
+      }else{
+        console.warn('[loadDashboard] REST API failed, falling back to SDK');
+        const q = query(collection(db, 'records'), where('year','==',y), where('month','==',m));
+        const snap = await getDocsFromServer(q);
+        snap.forEach(d=> {
+          const r = {id: d.id, ...d.data()};
+          records.push(r);
+          allRecordsCache.push(r);
+        });
+      }
+    }
+    records.sort((a,b)=> (a.serial||0) - (b.serial||0));
+    cachedRecords = records; cachedRates = rates; cachedMonth = m; cachedYear = y;
+    renderDashboard(records, rates, m, y);
+    console.log('[loadDashboard] Rendered', records.length, 'records');
+  }catch(e){
+    console.error('[loadDashboard] Error:', e);
+    showToast('লোডে ত্রুটি: '+e.message, 'error');
+  }finally{
+    if(!silent) hideLoading();
+  }
+}
+
+// ===== Refresh from cache (no loading spinner) =====
+// ALL pages refresh instantly from cache — called after add/edit/delete/upload
+async function refreshDashboardFromCache(){
+  if(!firebaseReady) return;
+  const m = parseInt(document.getElementById('dashMonth').value);
+  const y = parseInt(document.getElementById('dashYear').value);
+  if(isNaN(m) || isNaN(y)) return;
+  const rates = await getRates(y, m);
+  currentRates = rates;
+  const records = allRecordsCache.filter(r => Number(r.year) === y && Number(r.month) === m)
+    .sort((a,b)=> (a.serial||0) - (b.serial||0));
+  cachedRecords = records; cachedRates = rates; cachedMonth = m; cachedYear = y;
+  renderDashboard(records, rates, m, y);
+}
+
+async function refreshManageFromCache(){
+  if(!firebaseReady) return;
+  const m = parseInt(document.getElementById('manageMonth').value);
+  const y = parseInt(document.getElementById('manageYear').value);
+  if(isNaN(m) || isNaN(y)) return;
+  const rates = await getRates(y, m);
+  currentRates = rates;
+  const records = allRecordsCache.filter(r => Number(r.year) === y && Number(r.month) === m)
+    .sort((a,b)=> (a.serial||0) - (b.serial||0));
+  renderManage(records, rates, m, y);
+}
+
+function renderDashboard(records, rates, m, y){
+  const tbody = document.querySelector('#dashTable tbody');
+  const tfoot = document.querySelector('#dashTable tfoot');
+  tbody.innerHTML = '';
+  if(records.length === 0){
+    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:30px;color:var(--text-2)">এই মাসের জন্য কোনো ডাটা নেই।</td></tr>`;
+    tfoot.innerHTML = '';
+  }else{
+    let tBf=0, tLn=0, tEx=0, tBill=0, tDep=0, tNext=0;
+    let anyNext = false;
+    let rowsHtml = '';
+    records.forEach((r,i)=>{
+      const bf = Number(r.breakfast)||0, ln = Number(r.lunch)||0, ex = Number(r.extraCost)||0;
+      const bill = Number(r.totalBill)||0, dep = Number(r.totalDeposit)||0;
+      const da = Number(r.dueAdvance)||0;
+      const nextRaw = r.nextMonthAdvance;
+      const hasNext = !(nextRaw === null || nextRaw === undefined || nextRaw === '' || isNaN(nextRaw));
+      const next = hasNext ? Number(nextRaw) : null;
+      if(hasNext){ anyNext = true; tNext += next; }
+      tBf+=bf; tLn+=ln; tEx+=ex; tBill+=bill; tDep+=dep;
+      const daClass = da >= 0 ? 'text-positive' : 'text-negative';
+      const daSign = da >= 0 ? '+' : '';
+      const nextDisplay = hasNext ? fmt(next) : '';
+      rowsHtml += `<tr>
+        <td>${i+1}</td><td>${r.name||'-'}</td><td>${r.designation||'-'}</td>
+        <td>${fmt(bf)}</td><td>${fmt(ln)}</td><td>${fmt(ex)}</td>
+        <td>${fmt(bill)}</td><td>${fmt(dep)}</td>
+        <td class="${daClass}">${daSign}${fmt(da)}</td><td>${nextDisplay}</td>
+      </tr>`;
+    });
+    tbody.innerHTML = rowsHtml;
+    const net = tDep - tBill;
+    const netClass = net >= 0 ? 'text-positive' : 'text-negative';
+    const netSign = net >= 0 ? '+' : '';
+    const totalNextDisplay = anyNext ? fmt(tNext) : '';
+    tfoot.innerHTML = `<tr>
+      <td colspan="3">মোট (${getMonthLabel(m)} ${y})</td>
+      <td>${fmt(tBf)}</td><td>${fmt(tLn)}</td><td>${fmt(tEx)}</td>
+      <td>${fmt(tBill)}</td><td>${fmt(tDep)}</td>
+      <td class="${netClass}">${netSign}${fmt(net)}</td><td>${totalNextDisplay}</td>
+    </tr>`;
+  }
+  document.getElementById('statPersons').textContent = records.length;
+  const tBf = records.reduce((s,r)=>s+(Number(r.breakfast)||0),0);
+  const tLn = records.reduce((s,r)=>s+(Number(r.lunch)||0),0);
+  const tEx = records.reduce((s,r)=>s+(Number(r.extraCost)||0),0);
+  const tBill = records.reduce((s,r)=>s+(Number(r.totalBill)||0),0);
+  const tDep = records.reduce((s,r)=>s+(Number(r.totalDeposit)||0),0);
+  const tNext = records.reduce((s,r)=>{
+    const v = r.nextMonthAdvance;
+    return (v === null || v === undefined || v === '' || isNaN(v)) ? s : s + Number(v);
+  },0);
+  const anyNextStat = records.some(r => !(r.nextMonthAdvance === null || r.nextMonthAdvance === undefined || r.nextMonthAdvance === '' || isNaN(r.nextMonthAdvance)));
+  const net = tDep - tBill;
+  document.getElementById('statBreakfast').textContent = fmt(tBf);
+  document.getElementById('statLunch').textContent = fmt(tLn);
+  document.getElementById('statExtra').textContent = fmt(tEx);
+  document.getElementById('statTotalBill').textContent = fmt(tBill);
+  document.getElementById('statTotalDeposit').textContent = fmt(tDep);
+  document.getElementById('statNetDue').textContent = (net>=0?'+':'') + fmt(net);
+  document.getElementById('statNextAdvance').textContent = anyNextStat ? fmt(tNext) : '—';
+}
+
+// ===== Sign Up =====
+async function handleSignup(e){
+  e.preventDefault();
+  if(!firebaseReady){ showToast('Firebase প্রস্তুত নয়', 'error'); return; }
+  const name = document.getElementById('signupName').value.trim();
+  const usernameRaw = document.getElementById('signupUsername').value.trim();
+  const username = usernameRaw.toLowerCase();
+  const email = document.getElementById('signupEmail').value.trim();
+  const mobile = document.getElementById('signupMobile').value.trim();
+  const password = document.getElementById('signupPassword').value;
+  const confirm = document.getElementById('signupConfirm').value;
+  const alertEl = document.getElementById('signupAlert');
+
+  if(username.length < 3){ alertEl.innerHTML = '<div class="alert alert-error"><i class="bi bi-x-circle-fill"></i> ইউজারনেম কমপক্ষে ৩ অক্ষরের হতে হবে</div>'; return; }
+  if(!/^[a-zA-Z0-9._-]+$/.test(username)){ alertEl.innerHTML = '<div class="alert alert-error"><i class="bi bi-x-circle-fill"></i> ইউজারনেমে শুধু ইংরেজি অক্ষর, সংখ্যা, . _ - ব্যবহার করুন</div>'; return; }
+  if(!/^[0-9+]{6,}$/.test(mobile.replace(/\s/g,''))){ alertEl.innerHTML = '<div class="alert alert-error"><i class="bi bi-x-circle-fill"></i> সঠিক মোবাইল নম্বর দিন</div>'; return; }
+  if(password !== confirm){ alertEl.innerHTML = '<div class="alert alert-error"><i class="bi bi-x-circle-fill"></i> পাসওয়ার্ড মিলছে না</div>'; return; }
+  if(password.length < 6){ alertEl.innerHTML = '<div class="alert alert-error"><i class="bi bi-x-circle-fill"></i> পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে</div>'; return; }
+
+  showLoading('অ্যাকাউন্ট তৈরি হচ্ছে...');
+  try{
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    // Clear any previous auto-logout flag (fresh login)
+    clearAutoLoggedOutFlag();
+    await updateProfile(cred.user, {displayName: name});
+    try{
+      await setDoc(doc(db, 'users', cred.user.uid), {
+        name, username, email, mobile, createdAt: new Date().toISOString()
+      });
+      await setDoc(doc(db, 'usernames', username), {
+        uid: cred.user.uid, email, username, createdAt: new Date().toISOString()
+      });
+    }catch(fwErr){
+      if(fwErr.code === 'permission-denied'){
+        throw new Error('FIRESTORE_RULES_ISSUE');
+      }
+      throw fwErr;
+    }
+    showToast('অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!', 'success');
+    // Save the new username to local autocomplete list (for next login suggestions)
+    saveUsernameToLocal(username);
+    alertEl.innerHTML = '<div class="alert alert-success"><i class="bi bi-check-circle-fill"></i> অ্যাকাউন্ট তৈরি হয়েছে!</div>';
+    setTimeout(()=>{
+      showAuthPage('signinPage');
+      document.getElementById('signinEmail').value = username;
+      document.getElementById('signinPassword').value = '';
+    }, 1200);
+  }catch(err){
+    let msg = err.message;
+    if(msg === 'FIRESTORE_RULES_ISSUE'){
+      msg = 'Firestore Security Rules সমস্যা! Firebase Console → Firestore Database → Rules এ rules পেস্ট করে Publish করুন।';
+    }else if(err.code === 'auth/email-already-in-use') msg = 'এই ইমেইল দিয়ে ইতিমধ্যে অ্যাকাউন্ট আছে';
+    else if(err.code === 'auth/invalid-email') msg = 'অবৈধ ইমেইল ঠিকানা';
+    else if(err.code === 'auth/weak-password') msg = 'পাসওয়ার্ড খুবই দুর্বল';
+    else if(err.code === 'auth/network-request-failed') msg = 'নেটওয়ার্ক সমস্যা';
+    else if(err.code === 'auth/unauthorized-domain') msg = 'Firebase authorized domains এ আপনার URL যোগ করুন';
+    alertEl.innerHTML = `<div class="alert alert-error"><i class="bi bi-x-circle-fill"></i> ${msg}</div>`;
+    console.error('Signup error:', err);
+  }finally{ hideLoading(); }
+}
+
+// ===== Sign In =====
+async function handleSignin(e){
+  e.preventDefault();
+  if(!firebaseReady){ showToast('Firebase প্রস্তুত নয়', 'error'); return; }
+  const inputRaw = document.getElementById('signinEmail').value.trim();
+  const password = document.getElementById('signinPassword').value;
+  const alertEl = document.getElementById('signinAlert');
+  if(!inputRaw){ alertEl.innerHTML = '<div class="alert alert-error"><i class="bi bi-x-circle-fill"></i> ইমেইল বা ইউজারনেম দিন</div>'; return; }
+  showLoading('সাইন ইন হচ্ছে...');
+  try{
+    let emailToUse = inputRaw;
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inputRaw);
+    if(!isEmail){
+      const username = inputRaw.toLowerCase();
+      let resolvedEmail = null;
+      try{
+        const snap = await getDoc(doc(db, 'usernames', username));
+        if(snap.exists()) resolvedEmail = snap.data().email;
+      }catch(fsErr){
+        if(fsErr.code === 'permission-denied'){
+          throw new Error('USERNAME_LOOKUP_FAILED');
+        }
+        throw fsErr;
+      }
+      if(!resolvedEmail){
+        alertEl.innerHTML = '<div class="alert alert-error"><i class="bi bi-x-circle-fill"></i> এই ইউজারনেম দিয়ে কোনো অ্যাকাউন্ট পাওয়া যায়নি</div>';
+        hideLoading();
+        return;
+      }
+      emailToUse = resolvedEmail;
+    }
+    await signInWithEmailAndPassword(auth, emailToUse, password);
+    // Save the typed username/email to local autocomplete list (for next login suggestions)
+    saveUsernameToLocal(inputRaw);
+    // Clear any previous auto-logout flag (fresh login)
+    clearAutoLoggedOutFlag();
+    showToast('সফলভাবে সাইন ইন হয়েছে!', 'success');
+  }catch(err){
+    let msg = err.message;
+    if(msg === 'USERNAME_LOOKUP_FAILED'){
+      msg = 'ইউজারনেম দিয়ে লগইন করতে হলে Firestore Rules আপডেট করুন। `usernames` কালেকশনে public read access দিন।';
+    }else if(err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password') msg = 'ভুল ইমেইল/ইউজারনেম বা পাসওয়ার্ড';
+    else if(err.code === 'auth/user-not-found') msg = 'এই ইমেইল দিয়ে কোনো অ্যাকাউন্ট নেই';
+    else if(err.code === 'auth/invalid-email') msg = 'অবৈধ ইমেইল';
+    else if(err.code === 'auth/too-many-requests') msg = 'অনেকবার চেষ্টা করেছেন। পরে চেষ্টা করুন';
+    else if(err.code === 'auth/network-request-failed') msg = 'নেটওয়ার্ক সমস্যা';
+    else if(err.code === 'auth/unauthorized-domain') msg = 'Firebase authorized domains এ URL যোগ করুন';
+    else if(err.code === 'permission-denied') msg = 'Firestore Security Rules সমস্যা। `usernames` কালেকশনে public read access দিন।';
+    alertEl.innerHTML = `<div class="alert alert-error"><i class="bi bi-x-circle-fill"></i> ${msg}</div>`;
+    console.error('Signin error:', err);
+  }finally{ hideLoading(); }
+}
+
+// ===== Forgot Password =====
+async function handleForgot(e){
+  e.preventDefault();
+  if(!firebaseReady){ showToast('Firebase প্রস্তুত নয়', 'error'); return; }
+  const inputRaw = document.getElementById('forgotEmail').value.trim();
+  const alertEl = document.getElementById('forgotAlert');
+  if(!inputRaw){ alertEl.innerHTML = '<div class="alert alert-error"><i class="bi bi-x-circle-fill"></i> ইমেইল বা ইউজারনেম দিন</div>'; return; }
+  showLoading('রিসেট লিংক পাঠানো হচ্ছে...');
+  try{
+    let emailToUse = inputRaw;
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inputRaw);
+    if(!isEmail){
+      const username = inputRaw.toLowerCase();
+      let resolvedEmail = null;
+      try{
+        const snap = await getDoc(doc(db, 'usernames', username));
+        if(snap.exists()) resolvedEmail = snap.data().email;
+      }catch(fsErr){
+        if(fsErr.code === 'permission-denied') throw new Error('USERNAME_LOOKUP_FAILED');
+        throw fsErr;
+      }
+      if(!resolvedEmail){
+        alertEl.innerHTML = '<div class="alert alert-error"><i class="bi bi-x-circle-fill"></i> এই ইউজারনেম দিয়ে কোনো অ্যাকাউন্ট পাওয়া যায়নি</div>';
+        hideLoading();
+        return;
+      }
+      emailToUse = resolvedEmail;
+    }
+    await sendPasswordResetEmail(auth, emailToUse, {url: window.location.href.split('?')[0].split('#')[0], handleCodeInApp: false});
+    alertEl.innerHTML = `<div class="alert alert-success"><i class="bi bi-check-circle-fill"></i> রিসেট লিংক <strong>${emailToUse}</strong> ইমেইলে পাঠানো হয়েছে।</div>`;
+  }catch(err){
+    let msg = err.message;
+    if(msg === 'USERNAME_LOOKUP_FAILED') msg = 'Firestore Rules আপডেট করুন। `usernames` কালেকশনে public read access দিন।';
+    else if(err.code === 'auth/user-not-found') msg = 'এই ইমেইল দিয়ে কোনো অ্যাকাউন্ট নেই';
+    else if(err.code === 'auth/invalid-email') msg = 'অবৈধ ইমেইল';
+    else if(err.code === 'auth/network-request-failed') msg = 'নেটওয়ার্ক সমস্যা';
+    else if(err.code === 'permission-denied') msg = 'Firestore Rules সমস্যা। `usernames` কালেকশনে public read access দিন।';
+    alertEl.innerHTML = `<div class="alert alert-error"><i class="bi bi-x-circle-fill"></i> ${msg}</div>`;
+    console.error('Forgot error:', err);
+  }finally{ hideLoading(); }
+}
+
+// ===== Logout (clears all fields) =====
+async function handleLogout(){
+  if(!firebaseReady) return;
+  try{
+    clearAutoLoggedOutFlag(); // user explicitly logged out — no need to block next auto-login
+    await signOut(auth);
+    showToast('সফলভাবে লগআউট হয়েছে', 'info');
+  }catch(e){ showToast('লগআউটে ত্রুটি: '+e.message, 'error'); }
+}
+
+// ===== Add Entry =====
+function updateAddCalcPreview(){
+  const bf = parseFloat(document.getElementById('fBreakfast').value) || 0;
+  const ln = parseFloat(document.getElementById('fLunch').value) || 0;
+  const ex = parseFloat(document.getElementById('fExtra').value) || 0;
+  const dep = parseFloat(document.getElementById('fDeposit').value) || 0;
+  const nextAdvInput = document.getElementById('fNextAdvance').value;
+  const bRate = currentRates.breakfast || DEFAULT_BREAKFAST_RATE;
+  const lRate = currentRates.lunch || DEFAULT_LUNCH_RATE;
+  const totalBill = calcTotalBill(bf, ln, ex, bRate, lRate);
+  const dueAdv = calcDueAdvance(dep, totalBill);
+  const nextA = calcNextAdvance(dueAdv, nextAdvInput);
+  document.getElementById('cpTotalExpense').textContent = fmt((bf * bRate) + (ln * lRate) + ex);
+  document.getElementById('cpTotalBill').textContent = fmt(totalBill);
+  document.getElementById('cpDeposit').textContent = fmt(dep);
+  const daEl = document.getElementById('cpDueAdvance');
+  const daRow = document.getElementById('cpDueAdvanceRow');
+  daEl.textContent = (dueAdv>=0?'+':'') + fmt(dueAdv);
+  daRow.classList.remove('positive','negative');
+  if(dueAdv >= 0) daRow.classList.add('positive');
+  else daRow.classList.add('negative');
+  // অগ্রিম জমা প্রিভিউ
+  const naEl = document.getElementById('cpNextAdvance');
+  const naRow = document.getElementById('cpNextAdvanceRow');
+  if(nextA === null){
+    naEl.textContent = '—';
+    naRow.classList.remove('positive','negative');
+  } else {
+    naEl.textContent = (nextA>=0?'+':'') + fmt(nextA);
+    naRow.classList.remove('positive','negative');
+    if(nextA >= 0) naRow.classList.add('positive');
+    else naRow.classList.add('negative');
+  }
+}
+
+async function handleAddSubmit(e){
+  e.preventDefault();
+  if(!firebaseReady){ showToast('Firebase প্রস্তুত নয়', 'error'); return; }
+  const m = parseInt(document.getElementById('addMonth').value);
+  const y = parseInt(document.getElementById('addYear').value);
+  if(isNaN(y) || y < 2020 || y > 2099){ showToast('সাল সঠিকভাবে দিন (2020-2099)', 'error'); return; }
+  const name = document.getElementById('fName').value.trim();
+  const designation = document.getElementById('fDesignation').value.trim();
+  const bf = parseFloat(document.getElementById('fBreakfast').value) || 0;
+  const ln = parseFloat(document.getElementById('fLunch').value) || 0;
+  const ex = parseFloat(document.getElementById('fExtra').value) || 0;
+  const dep = parseFloat(document.getElementById('fDeposit').value) || 0;
+  const nextAdvInput = document.getElementById('fNextAdvance').value;
+  if(!name){ showToast('নাম দিন', 'error'); return; }
+
+  // Get rates — try cache first, fall back to default
+  const rates = await getRates(y, m);
+  const totalBill = calcTotalBill(bf, ln, ex, rates.breakfast, rates.lunch);
+  const dueAdv = calcDueAdvance(dep, totalBill);
+  const nextAdv = calcNextAdvance(dueAdv, nextAdvInput);
+
+  // Find max serial from cache (instant — no network call)
+  let maxSerial = 0;
+  allRecordsCache.forEach(r => {
+    if(Number(r.year) === y && Number(r.month) === m){
+      const s = Number(r.serial) || 0;
+      if(s > maxSerial) maxSerial = s;
+    }
+  });
+
+  const newRecord = {
+    year: y, month: m, serial: maxSerial + 1,
+    name, designation, breakfast: bf, lunch: ln, extraCost: ex,
+    totalBill, totalDeposit: dep, dueAdvance: dueAdv, nextMonthAdvance: nextAdv,
+    breakfastRate: rates.breakfast, lunchRate: rates.lunch, createdAt: new Date().toISOString()
+  };
+
+  // OPTIMISTIC UI: Add to cache IMMEDIATELY with temp ID — UI feels instant
+  const tempId = 'temp_' + Date.now();
+  newRecord.id = tempId;
+  allRecordsCache.push(newRecord);
+  availableYears.add(y); availableMonths.add(m);
+  if(!yearMonthMap[y]) yearMonthMap[y] = new Set();
+  yearMonthMap[y].add(m);
+  populateYearDropdowns();
+  populateMonthDropdowns();
+  document.getElementById('addYear').value = y;
+  document.getElementById('addMonth').value = m;
+
+  // Reset form
+  document.getElementById('addForm').reset();
+  ['fBreakfast','fLunch','fExtra','fDeposit','fNextAdvance'].forEach(id=>{ const el = document.getElementById(id); if(el) el.value = ''; });
+  updateAddCalcPreview();
+
+  // Instant UI refresh
+  await refreshDashboardFromCache();
+  await refreshManageFromCache();
+  showToast('হিসাব সেভ হচ্ছে...', 'info', 1500);
+  broadcastDataChange();
+
+  // Background: save to server via REST API
+  (async ()=>{
+    try{
+      const user = auth.currentUser;
+      if(!user){ throw new Error('অনুমতি নেই — আবার লগইন করুন'); }
+      const idToken = await user.getIdToken();
+      const projectId = 'canteen-5f945';
+      const restUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/records`;
+
+      const fields = {};
+      Object.keys(newRecord).forEach(k=>{
+        if(k === 'id') return; // Don't store id as field
+        const v = newRecord[k];
+        if(typeof v === 'number'){
+          fields[k] = { integerValue: v.toString() };
+        }else if(typeof v === 'string'){
+          fields[k] = { stringValue: v };
+        }else if(v === null){
+          fields[k] = { nullValue: null };
+        }
+      });
+
+      const restResponse = await fetch(restUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${idToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ fields }),
+        cache: 'no-store'
+      });
+
+      if(!restResponse.ok){
+        const errorText = await restResponse.text();
+        console.error('[Add] REST API error:', restResponse.status, errorText);
+        throw new Error(`সেভ ব্যর্থ: ${restResponse.status}`);
+      }
+
+      const createdDoc = await restResponse.json();
+      const newId = createdDoc.name.split('/').pop();
+      console.log('[Add] ✓ REST API created record:', newId);
+
+      // Update cache: replace temp ID with real ID
+      const idx = allRecordsCache.findIndex(r => r.id === tempId);
+      if(idx >= 0){
+        allRecordsCache[idx].id = newId;
+      }
+      showToast('হিসাব সফলভাবে সেভ হয়েছে ✓', 'success', 2000);
+      // onSnapshot will sync cache from server automatically
+      broadcastDataChange();
+    }catch(e){
+      console.error('[Add] Background error:', e.message);
+      // Remove temp record on failure
+      allRecordsCache = allRecordsCache.filter(r => r.id !== tempId);
+      showToast('সেভে সমস্যা: '+e.message, 'error', 5000);
+      await refreshDashboardFromCache();
+      await refreshManageFromCache();
+    }
+  })();
+}
+
+// ===== Manage =====
+async function loadManage(silent=false){
+  if(!firebaseReady) return;
+  const m = parseInt(document.getElementById('manageMonth').value);
+  const y = parseInt(document.getElementById('manageYear').value);
+  if(isNaN(m) || isNaN(y)) return;
+  if(!silent) showLoading('হিসাব লোড হচ্ছে...');
+  try{
+    const rates = await getRates(y, m);
+    currentRates = rates;
+    let records = [];
+    // Use cache ONLY for silent refreshes; use REST API for explicit loads
+    if(silent && allRecordsCache.length > 0){
+      records = allRecordsCache.filter(r => Number(r.year) === y && Number(r.month) === m);
+    } else {
+      console.log('[loadManage] Fetching via REST API (guaranteed fresh)');
+      const user = auth.currentUser;
+      if(!user){
+        throw new Error('অনুমতি নেই — আবার লগইন করুন');
+      }
+      const idToken = await user.getIdToken();
+      const projectId = 'canteen-5f945';
+      // Simple list — no filter
+      const listUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/records?pageSize=1000`;
+      console.log('[loadManage] REST URL:', listUrl);
+      const restResp = await fetch(listUrl, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${idToken}`,
+          'Content-Type': 'application/json'
+        },
+        cache: 'no-store'
+      });
+      if(restResp.ok){
+        const data = await restResp.json();
+        const docs = data.documents || [];
+        console.log('[loadManage] REST API returned', docs.length, 'documents');
+        // Filter on client side
+        allRecordsCache = []; // Clear cache completely
+        docs.forEach(doc=>{
+          if(doc.fields){
+            const r = {};
+            Object.keys(doc.fields).forEach(k=>{
+              const v = doc.fields[k];
+              if(v.integerValue !== undefined) r[k] = parseInt(v.integerValue);
+              else if(v.doubleValue !== undefined) r[k] = parseFloat(v.doubleValue);
+              else if(v.stringValue !== undefined) r[k] = v.stringValue;
+              else if(v.nullValue !== undefined) r[k] = null;
+              else if(v.timestampValue !== undefined) r[k] = v.timestampValue;
+              else if(v.booleanValue !== undefined) r[k] = v.booleanValue;
+            });
+            r.id = doc.name.split('/').pop();
+            allRecordsCache.push(r);
+            if(Number(r.year) === y && Number(r.month) === m){
+              records.push(r);
+            }
+          }
+        });
+      }else{
+        console.warn('[loadManage] REST API failed, falling back to SDK');
+        const q = query(collection(db, 'records'), where('year','==',y), where('month','==',m));
+        const snap = await getDocsFromServer(q);
+        snap.forEach(d=> {
+          const r = {id: d.id, ...d.data()};
+          records.push(r);
+          allRecordsCache.push(r);
+        });
+      }
+    }
+    records.sort((a,b)=> (a.serial||0) - (b.serial||0));
+    renderManage(records, rates, m, y);
+  }catch(e){
+    showToast('ত্রুটি: '+e.message, 'error');
+  }finally{
+    if(!silent) hideLoading();
+  }
+}
+
+function renderManage(records, rates, m, y){
+  // সার্চ ফিল্টার প্রয়োগ
+  const searchTerm = (document.getElementById('manageSearch')?.value || '').trim().toLowerCase();
+  let filteredRecords = records;
+  if(searchTerm){
+    filteredRecords = records.filter(r =>
+      (r.name || '').toLowerCase().includes(searchTerm) ||
+      (r.designation || '').toLowerCase().includes(searchTerm)
+    );
+  }
+  const tbody = document.querySelector('#manageTable tbody');
+  const tfoot = document.querySelector('#manageTable tfoot');
+  const empty = document.getElementById('manageEmpty');
+  tbody.innerHTML = '';
+  if(filteredRecords.length === 0){
+    empty.style.display = 'block';
+    if(searchTerm){
+      empty.querySelector('h3').textContent = 'কোনো ফলাফল পাওয়া যায়নি';
+      empty.querySelector('p').textContent = `"${searchTerm}" — এই নামে কোনো রেকর্ড নেই`;
+    }else{
+      empty.querySelector('h3').textContent = 'কোনো ডাটা নেই';
+      empty.querySelector('p').textContent = 'এই মাস ও সালের জন্য কোনো রেকর্ড পাওয়া যায়নি।';
+    }
+    tfoot.innerHTML = '';
+    return;
+  }
+  empty.style.display = 'none';
+  let tBf=0, tLn=0, tEx=0, tBill=0, tDep=0, tNext=0;
+  let anyNext = false;
+  let rowsHtml = '';
+  filteredRecords.forEach((r,i)=>{
+    const bf = Number(r.breakfast)||0, ln = Number(r.lunch)||0, ex = Number(r.extraCost)||0;
+    const bill = Number(r.totalBill)||0, dep = Number(r.totalDeposit)||0;
+    const da = Number(r.dueAdvance)||0;
+    const nextRaw = r.nextMonthAdvance;
+    const hasNext = !(nextRaw === null || nextRaw === undefined || nextRaw === '' || isNaN(nextRaw));
+    const next = hasNext ? Number(nextRaw) : null;
+    if(hasNext){ anyNext = true; tNext += next; }
+    tBf+=bf; tLn+=ln; tEx+=ex; tBill+=bill; tDep+=dep;
+    const daClass = da >= 0 ? 'text-positive' : 'text-negative';
+    const daSign = da >= 0 ? '+' : '';
+    const nextDisplay = hasNext ? fmt(next) : '';
+    rowsHtml += `<tr>
+      <td>${i+1}</td><td>${r.name||'-'}</td><td>${r.designation||'-'}</td>
+      <td>${fmt(bf)}</td><td>${fmt(ln)}</td><td>${fmt(ex)}</td>
+      <td>${fmt(bill)}</td><td>${fmt(dep)}</td>
+      <td class="${daClass}">${daSign}${fmt(da)}</td><td>${nextDisplay}</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button class="row-action edit" data-id="${r.id}" title="এডিট"><i class="bi bi-pencil-fill"></i></button>
+        <button class="row-action delete" data-id="${r.id}" title="ডিলিট"><i class="bi bi-trash-fill"></i></button>
+      </td>
+    </tr>`;
+  });
+  tbody.innerHTML = rowsHtml;
+  const net = tDep - tBill;
+  const netClass = net >= 0 ? 'text-positive' : 'text-negative';
+  const netSign = net >= 0 ? '+' : '';
+  const totalNextDisplay = anyNext ? fmt(tNext) : '';
+  tfoot.innerHTML = `<tr>
+    <td colspan="3">মোট (${getMonthLabel(m)} ${y})</td>
+    <td>${fmt(tBf)}</td><td>${fmt(tLn)}</td><td>${fmt(tEx)}</td>
+    <td>${fmt(tBill)}</td><td>${fmt(tDep)}</td>
+    <td class="${netClass}">${netSign}${fmt(net)}</td><td>${totalNextDisplay}</td><td></td>
+  </tr>`;
+  tbody.querySelectorAll('.row-action.edit').forEach(b=> b.addEventListener('click', ()=> openEditModal(b.dataset.id, records)));
+  tbody.querySelectorAll('.row-action.delete').forEach(b=> b.addEventListener('click', ()=> confirmDelete(b.dataset.id, records)));
+}
+
+// ===== Edit Modal =====
+function openEditModal(id, records){
+  const r = records.find(x=> x.id === id);
+  if(!r) return;
+  document.getElementById('editId').value = id;
+  document.getElementById('eName').value = r.name || '';
+  document.getElementById('eDesignation').value = r.designation || '';
+  document.getElementById('eBreakfast').value = r.breakfast ?? 0;
+  document.getElementById('eLunch').value = r.lunch ?? 0;
+  document.getElementById('eExtra').value = r.extraCost ?? 0;
+  document.getElementById('eDeposit').value = r.totalDeposit ?? 0;
+  document.getElementById('eNextAdvance').value = (r.nextMonthAdvance === null || r.nextMonthAdvance === undefined || r.nextMonthAdvance === '') ? '' : r.nextMonthAdvance;
+  updateEditCalc();
+  document.getElementById('editModal').classList.add('active');
+}
+function updateEditCalc(){
+  const bf = parseFloat(document.getElementById('eBreakfast').value) || 0;
+  const ln = parseFloat(document.getElementById('eLunch').value) || 0;
+  const ex = parseFloat(document.getElementById('eExtra').value) || 0;
+  const dep = parseFloat(document.getElementById('eDeposit').value) || 0;
+  const bRate = currentRates.breakfast || DEFAULT_BREAKFAST_RATE;
+  const lRate = currentRates.lunch || DEFAULT_LUNCH_RATE;
+  const tb = calcTotalBill(bf, ln, ex, bRate, lRate);
+  const da = calcDueAdvance(dep, tb);
+  document.getElementById('epTotalBill').textContent = fmt(tb);
+  const daEl = document.getElementById('epDueAdvance');
+  const daRow = document.getElementById('epDueAdvanceRow');
+  daEl.textContent = (da>=0?'+':'') + fmt(da);
+  daRow.classList.remove('positive','negative');
+  if(da >= 0) daRow.classList.add('positive');
+  else daRow.classList.add('negative');
+}
+
+async function handleSaveEdit(){
+  const id = document.getElementById('editId').value;
+  const name = document.getElementById('eName').value.trim();
+  if(!name){ showToast('নাম দিন', 'error'); return; }
+  const designation = document.getElementById('eDesignation').value.trim();
+  const bf = parseFloat(document.getElementById('eBreakfast').value) || 0;
+  const ln = parseFloat(document.getElementById('eLunch').value) || 0;
+  const ex = parseFloat(document.getElementById('eExtra').value) || 0;
+  const dep = parseFloat(document.getElementById('eDeposit').value) || 0;
+  const nextAdvInput = document.getElementById('eNextAdvance').value;
+  const bRate = currentRates.breakfast || DEFAULT_BREAKFAST_RATE;
+  const lRate = currentRates.lunch || DEFAULT_LUNCH_RATE;
+  const totalBill = calcTotalBill(bf, ln, ex, bRate, lRate);
+  const dueAdv = calcDueAdvance(dep, totalBill);
+  const nextAdv = calcNextAdvance(dueAdv, nextAdvInput);
+  showLoading('আপডেট হচ্ছে...');
+  try{
+    await updateDoc(doc(db, 'records', id), {
+      name, designation, breakfast: bf, lunch: ln, extraCost: ex,
+      totalBill, totalDeposit: dep, dueAdvance: dueAdv, nextMonthAdvance: nextAdv,
+      breakfastRate: bRate, lunchRate: lRate, updatedAt: new Date().toISOString()
+    });
+    // Update cache immediately
+    const cacheIdx = allRecordsCache.findIndex(r => r.id === id);
+    if(cacheIdx >= 0){
+      allRecordsCache[cacheIdx] = {
+        ...allRecordsCache[cacheIdx],
+        name, designation, breakfast: bf, lunch: ln, extraCost: ex,
+        totalBill, totalDeposit: dep, dueAdvance: dueAdv, nextMonthAdvance: nextAdv,
+        breakfastRate: bRate, lunchRate: lRate, updatedAt: new Date().toISOString()
+      };
+    }
+    showToast('সফলভাবে আপডেট হয়েছে!', 'success');
+    document.getElementById('editModal').classList.remove('active');
+    broadcastDataChange();
+    // Refresh views from cache (no loading spinner)
+    await refreshDashboardFromCache();
+    await refreshManageFromCache();
+  }catch(e){ showToast('ত্রুটি: '+e.message, 'error'); }
+  finally{ hideLoading(); }
+}
+
+// ===== Delete Confirm =====
+let deleteTargetId = null;
+function confirmDelete(id, records){
+  deleteTargetId = id;
+  const r = records.find(x=> x.id === id);
+  document.getElementById('confirmMessage').innerHTML = `<strong>${r ? r.name : 'এই রেকর্ড'}</strong> এর হিসাব মুছে ফেলতে চান? এটি স্থায়ীভাবে ডিলিট হবে।`;
+  document.getElementById('confirmModal').classList.add('active');
+}
+
+async function handleConfirmDelete(){
+  // Month + Year delete
+  if(deleteTargetId === '__month_year_delete__'){
+    const m = parseInt(document.getElementById('delMonth').value);
+    const y = parseInt(document.getElementById('delYear').value);
+    document.getElementById('confirmModal').classList.remove('active');
+    showLoading('মাস ও বছর অনুযায়ী ডাটা ডিলিট হচ্ছে...');
+    try{
+      const qRec = query(collection(db, 'records'), where('year','==',y), where('month','==',m));
+      const snapRec = await getDocsFromServer(qRec);
+      let batch = writeBatch(db); let count = 0;
+      snapRec.forEach(d=>{ batch.delete(d.ref); count++; });
+      if(count > 0) await batch.commit();
+      // মিল রেট ডিলিট করো
+      let rateCount = 0;
+      try{
+        const ref = doc(db, 'mealRates', `${y}_${m}`);
+        const snap = await getDoc(ref);
+        if(snap.exists()){ await deleteDoc(ref); rateCount++; }
+      }catch(e){}
+      showToast(`${count} রেকর্ড এবং ${rateCount} মিল রেট ডিলিট হয়েছে`, 'success');
+      deleteTargetId = null;
+      broadcastDataChange();
+      await populateAvailableYearsAndMonths();
+      populateYearDropdowns();
+      await loadDashboard(true);
+    }catch(e){ showToast('ত্রুটি: '+e.message, 'error'); }
+    finally{ hideLoading(); }
+    return;
+  }
+  // Year-range delete
+  if(deleteTargetId === '__admin_year_delete__'){
+    const fromY = parseInt(document.getElementById('delFromYear').value);
+    const toY = parseInt(document.getElementById('delToYear').value);
+    document.getElementById('confirmModal').classList.remove('active');
+    showLoading('সাল রেঞ্জ অনুযায়ী ডাটা ডিলিট হচ্ছে...');
+    try{
+      const qRec = query(collection(db, 'records'), where('year','>=',fromY), where('year','<=',toY));
+      const snapRec = await getDocsFromServer(qRec);
+      let batch = writeBatch(db); let count = 0;
+      snapRec.forEach(d=>{ batch.delete(d.ref); count++; });
+      if(count > 0) await batch.commit();
+      let rateCount = 0;
+      for(let yr=fromY; yr<=toY; yr++){
+        for(let m=0; m<12; m++){
+          try{
+            const ref = doc(db, 'mealRates', `${yr}_${m}`);
+            const snap = await getDoc(ref);
+            if(snap.exists()){ await deleteDoc(ref); rateCount++; }
+          }catch(e){}
+        }
+      }
+      showToast(`${count} রেকর্ড এবং ${rateCount} মিল রেট ডিলিট হয়েছে`, 'success');
+      deleteTargetId = null;
+      broadcastDataChange();
+      await populateAvailableYearsAndMonths();
+      populateYearDropdowns();
+      await loadDashboard(true);
+    }catch(e){ showToast('ত্রুটি: '+e.message, 'error'); }
+    finally{ hideLoading(); }
+    return;
+  }
+  if(!deleteTargetId) return;
+  const idToDelete = deleteTargetId;
+  // OPTIMISTIC UI: Remove from cache IMMEDIATELY (before server call) — feels instant
+  allRecordsCache = allRecordsCache.filter(r => r.id !== idToDelete);
+  cachedRecords = (cachedRecords || []).filter(r => r.id !== idToDelete);
+  // Close modal & reset
+  document.getElementById('confirmModal').classList.remove('active');
+  deleteTargetId = null;
+  showToast('রেকর্ড ডিলিট হচ্ছে...', 'info', 1500);
+  // Instant UI refresh (no spinner, no waiting)
+  await refreshDashboardFromCache();
+  await refreshManageFromCache();
+
+  // Background: delete from server (fire and forget, with error handling)
+  (async ()=>{
+    try{
+      const user = auth.currentUser;
+      if(!user) return;
+      const idToken = await user.getIdToken();
+      const projectId = 'canteen-5f945';
+      const restUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/records/${idToDelete}`;
+
+      const restResponse = await fetch(restUrl, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${idToken}`,
+          'Content-Type': 'application/json'
+        },
+        cache: 'no-store'
+      });
+
+      if(restResponse.ok || restResponse.status === 404){
+        console.log('[Delete] ✓ Server deleted:', idToDelete);
+        showToast('রেকর্ড স্থায়ীভাবে ডিলিট হয়েছে ✓', 'success', 2000);
+        broadcastDataChange();
+        // onSnapshot will sync cache from server automatically
+      }else if(restResponse.status === 403){
+        showToast('ডিলিট করার অনুমতি নেই!', 'error', 5000);
+        // Re-fetch from server to restore
+        allRecordsCache = [];
+        const activePage = document.querySelector('.nav-item.active');
+        if(activePage){
+          const page = activePage.dataset.page;
+          if(page === 'dashboard') await loadDashboard(true);
+          if(page === 'manage') await loadManage(true);
+        }
+      }else{
+        console.error('[Delete] Unexpected status:', restResponse.status);
+      }
+    }catch(e){
+      console.error('[Delete] Background error:', e.message);
+      showToast('ডিলিটে নেটওয়ার্ক সমস্যা — রিফ্রেশ করুন', 'warning', 4000);
+    }
+  })();
+}
+
+// ===== অভিযোগ লোড করুন (মাস/সাল ভিত্তিক + নাম সার্চ + solved) =====
+let allComplaintsCache = [];
+
+async function loadComplaints(){
+  if(!firebaseReady) return;
+  const m = parseInt(document.getElementById('compMonth')?.value || '0');
+  const y = parseInt(document.getElementById('compYear')?.value || '0');
+  if(isNaN(m) || isNaN(y) || y < 2020) return;
+  // Real-time listener থেকে allComplaintsCache আপডেট হয়ে যায়
+  // শুধু টেবিল রিফ্রেশ করো
+  showLoading('অভিযোগ লোড হচ্ছে...');
+  try{
+    // যদি cache খালি থাকে, একবার fetch করো
+    if(allComplaintsCache.length === 0){
+      const snap = await getDocsFromServer(collection(db, 'complaints'));
+      allComplaintsCache = [];
+      snap.forEach(d=>{
+        allComplaintsCache.push({id: d.id, ...d.data()});
+      });
+    }
+    renderComplaintsTable();
+  }catch(e){
+    showToast('ত্রুটি: '+e.message, 'error');
+  }finally{ hideLoading(); }
+}
+
+function renderComplaintsTable(){
+  const searchTerm = (document.getElementById('compSearch')?.value || '').trim().toLowerCase();
+  const m = parseInt(document.getElementById('compMonth')?.value || '0');
+  const y = parseInt(document.getElementById('compYear')?.value || '0');
+  const monthLabel = MONTHS_BN[m] || '';
+  let complaints = allComplaintsCache.filter(c => {
+    if(!c.monthYear) return false;
+    return c.monthYear.includes(monthLabel) && c.monthYear.includes(String(y));
+  });
+  if(searchTerm){
+    complaints = complaints.filter(c => (c.name || '').toLowerCase().includes(searchTerm));
+  }
+  complaints.sort((a,b)=>{
+    const ta = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+    const tb = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+    return tb - ta;
+  });
+  const tbody = document.querySelector('#complaintsTable tbody');
+  const empty = document.getElementById('complaintsEmpty');
+  tbody.innerHTML = '';
+  // বাল্ক ডিলিট বাটন hide
+  document.getElementById('bulkDeleteCompBtn').style.display = 'none';
+  // selectAll checkbox reset
+  const selectAll = document.getElementById('compSelectAll');
+  if(selectAll) selectAll.checked = false;
+  if(complaints.length === 0){
+    empty.style.display = 'block';
+    if(searchTerm) empty.querySelector('p').textContent = `"${searchTerm}" — এই নামে কোনো অভিযোগ নেই।`;
+    else empty.querySelector('p').textContent = 'এই মাস ও সালের জন্য কোনো অভিযোগ নেই।';
+    return;
+  }
+  empty.style.display = 'none';
+  let rowsHtml = '';
+  complaints.forEach((c,i)=>{
+    const dateStr = c.createdAt ? new Date(c.createdAt).toLocaleDateString('bn-BD') : '-';
+    const status = c.status || 'new';
+    const isSolved = status === 'solved';
+    // Solved → হাল্কা সবুজ, unsolved → লাল "সমাধান করুন"
+    const btnHtml = isSolved
+      ? `<button class="btn btn-sm" disabled style="background:#dcfce7;color:#16a34a;border:1px solid #bbf7d0;opacity:1"><i class="bi bi-check-circle-fill"></i> Solved</button>`
+      : `<button class="btn btn-danger btn-sm" data-solve-id="${c.id}"><i class="bi bi-arrow-clockwise"></i> সমাধান করুন</button>`;
+    rowsHtml += `<tr data-comp-id="${c.id}">
+      <td><input type="checkbox" class="comp-check" data-comp-id="${c.id}"></td>
+      <td>${i+1}</td>
+      <td>${c.name || '-'}</td>
+      <td style="white-space:normal;max-width:300px">${c.complaint || '-'}</td>
+      <td>${dateStr}</td>
+      <td style="text-align:center">${btnHtml}</td>
+    </tr>`;
+  });
+  tbody.innerHTML = rowsHtml;
+  // সমাধান করুন বাটন listeners
+  tbody.querySelectorAll('[data-solve-id]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const id = btn.dataset.solveId;
+      try{
+        await updateDoc(doc(db, 'complaints', id), {status: 'solved', solvedAt: new Date().toISOString()});
+        const idx = allComplaintsCache.findIndex(c=>c.id===id);
+        if(idx >= 0){ allComplaintsCache[idx].status = 'solved'; }
+        showToast('অভিযোগ solved করা হয়েছে', 'success');
+        renderComplaintsTable();
+      }catch(e){ showToast('ত্রুটি: '+e.message, 'error'); }
+    });
+  });
+  // Checkbox change → বাল্ক ডিলিট বাটন দেখাও/লুকাও
+  const bulkBtn = document.getElementById('bulkDeleteCompBtn');
+  tbody.querySelectorAll('.comp-check').forEach(cb=>{
+    cb.addEventListener('change', ()=>{
+      const anyChecked = tbody.querySelectorAll('.comp-check:checked').length > 0;
+      bulkBtn.style.display = anyChecked ? 'inline-flex' : 'none';
+    });
+  });
+  // Select all
+  if(selectAll){
+    selectAll.addEventListener('change', ()=>{
+      tbody.querySelectorAll('.comp-check').forEach(cb=>{ cb.checked = selectAll.checked; });
+      bulkBtn.style.display = selectAll.checked ? 'inline-flex' : 'none';
+    });
+  }
+}
+
+// ===== Rates =====
+async function loadRate(silent=false){
+  if(!firebaseReady) return;
+  const m = parseInt(document.getElementById('rateMonth').value);
+  const y = parseInt(document.getElementById('rateYear').value);
+  if(isNaN(m) || isNaN(y)) return;
+  if(!silent) showLoading('রেট লোড হচ্ছে...');
+  try{
+    const snap = await getDoc(doc(db, 'mealRates', `${y}_${m}`));
+    if(snap.exists()){
+      document.getElementById('rateBreakfast').value = snap.data().breakfastRate;
+      document.getElementById('rateLunch').value = snap.data().lunchRate;
+    }else{
+      document.getElementById('rateBreakfast').value = DEFAULT_BREAKFAST_RATE;
+      document.getElementById('rateLunch').value = DEFAULT_LUNCH_RATE;
+    }
+  }catch(e){ showToast('ত্রুটি: '+e.message, 'error'); }
+  finally{ if(!silent) hideLoading(); }
+}
+
+async function handleSaveRate(){
+  if(!firebaseReady){ showToast('Firebase প্রস্তুত নয়', 'error'); return; }
+  const m = parseInt(document.getElementById('rateMonth').value);
+  const y = parseInt(document.getElementById('rateYear').value);
+  const bf = parseFloat(document.getElementById('rateBreakfast').value) || 0;
+  const ln = parseFloat(document.getElementById('rateLunch').value) || 0;
+  showLoading('রেট সেভ হচ্ছে ও হিসাব আপডেট হচ্ছে...');
+  try{
+    await setDoc(doc(db, 'mealRates', `${y}_${m}`), {
+      breakfastRate: bf, lunchRate: ln, updatedAt: new Date().toISOString()
+    });
+    // Recalc all records for this month/year
+    const q = query(collection(db, 'records'), where('year','==',y), where('month','==',m));
+    const snap = await getDocsFromServer(q);
+    const batch = writeBatch(db);
+    snap.forEach(d=>{
+      const r = d.data();
+      const totalBill = calcTotalBill(r.breakfast, r.lunch, r.extraCost, bf, ln);
+      const dueAdvance = calcDueAdvance(r.totalDeposit, totalBill);
+      // Preserve existing nextMonthAdvance if it has a value; otherwise leave it null (empty)
+      const nextAdv = (r.nextMonthAdvance !== undefined && r.nextMonthAdvance !== null && r.nextMonthAdvance !== '')
+        ? Number(r.nextMonthAdvance) : null;
+      batch.update(d.ref, {
+        totalBill, dueAdvance, nextMonthAdvance: nextAdv,
+        breakfastRate: bf, lunchRate: ln, updatedAt: new Date().toISOString()
+      });
+    });
+    await batch.commit();
+    showToast('রেট সেভ হয়েছে এবং সকল হিসাব পুনরায় গণনা করা হয়েছে!', 'success');
+    // Update cache with recalculated values
+    allRecordsCache.forEach(r => {
+      if(Number(r.year) === y && Number(r.month) === m){
+        const totalBill = calcTotalBill(r.breakfast, r.lunch, r.extraCost, bf, ln);
+        const dueAdvance = calcDueAdvance(r.totalDeposit, totalBill);
+        const nextAdv = (r.nextMonthAdvance !== undefined && r.nextMonthAdvance !== null && r.nextMonthAdvance !== '')
+          ? Number(r.nextMonthAdvance) : null;
+        r.totalBill = totalBill;
+        r.dueAdvance = dueAdvance;
+        r.nextMonthAdvance = nextAdv;
+        r.breakfastRate = bf;
+        r.lunchRate = ln;
+      }
+    });
+    availableYears.add(y); availableMonths.add(m);
+    if(!yearMonthMap[y]) yearMonthMap[y] = new Set();
+    yearMonthMap[y].add(m);
+    populateYearDropdowns();
+    populateMonthDropdowns();
+    document.getElementById('rateYear').value = y;
+    document.getElementById('rateMonth').value = m;
+    // Refresh all views from cache (no spinner)
+    await refreshDashboardFromCache();
+    await refreshManageFromCache();
+    broadcastDataChange();
+  }catch(e){ showToast('ত্রুটি: '+e.message, 'error'); }
+  finally{ hideLoading(); }
+}
+
+// ===== Delete Panel (was Admin) =====
+async function handleDeleteUnlock(){
+  const pwd = document.getElementById('deletePassword').value;
+  if(!auth || !auth.currentUser){ showToast('প্রথমে সাইন ইন করুন', 'error'); return; }
+  if(!pwd){ showToast('পাসওয়ার্ড দিন', 'error'); return; }
+  showLoading('যাচাই হচ্ছে...');
+  try{
+    // Re-authenticate using current user's email + provided password
+    const email = auth.currentUser.email;
+    await signInWithEmailAndPassword(auth, email, pwd);
+    document.getElementById('deleteLockPanel').style.display = 'none';
+    document.getElementById('deletePanel').style.display = 'block';
+    showToast('ডিলিট মোড সক্রিয়', 'success');
+  }catch(e){
+    let msg = 'ভুল পাসওয়ার্ড';
+    if(e.code === 'auth/too-many-requests') msg = 'অনেকবার চেষ্টা করেছেন। পরে চেষ্টা করুন';
+    else if(e.code === 'auth/network-request-failed') msg = 'নেটওয়ার্ক সমস্যা';
+    showToast(msg, 'error');
+  }finally{ hideLoading(); }
+}
+
+function handleConfirmDelBtn(){
+  const fromY = parseInt(document.getElementById('delFromYear').value);
+  const toY = parseInt(document.getElementById('delToYear').value);
+  if(isNaN(fromY) || isNaN(toY)){ showToast('সাল সঠিকভাবে দিন', 'error'); return; }
+  if(fromY > toY){ showToast('শেষ সাল শুরু সাল থেকে বড় হতে হবে', 'error'); return; }
+  if(fromY < 2020 || fromY > 2099 || toY < 2020 || toY > 2099){ showToast('সাল 2020-2099 এর মধ্যে হতে হবে', 'error'); return; }
+  document.getElementById('confirmMessage').innerHTML = `
+    <strong>সতর্কতা!</strong> নিচের সমস্ত ডাটা স্থায়ীভাবে ডিলিট হবে:<br><br>
+    • সাল <strong>${fromY}</strong> থেকে সাল <strong>${toY}</strong> পর্যন্ত সকল মাসের রেকর্ড<br>
+    • সংশ্লিষ্ট সকল মিল রেট<br><br>
+    এই কাজটি <strong>ফিরিয়ে আনা যাবে না</strong>। নিশ্চিত?
+  `;
+  deleteTargetId = '__admin_year_delete__';
+  document.getElementById('confirmModal').classList.add('active');
+}
+
+function handleConfirmDelMonthBtn(){
+  const m = parseInt(document.getElementById('delMonth').value);
+  const y = parseInt(document.getElementById('delYear').value);
+  if(isNaN(m) || isNaN(y)){ showToast('মাস ও সাল সঠিকভাবে দিন', 'error'); return; }
+  if(y < 2020 || y > 2099){ showToast('সাল 2020-2099 এর মধ্যে হতে হবে', 'error'); return; }
+  const monthLabel = MONTHS_BN[m] || `মাস ${m+1}`;
+  document.getElementById('confirmMessage').innerHTML = `
+    <strong>সতর্কতা!</strong> নিচের সমস্ত ডাটা স্থায়ীভাবে ডিলিট হবে:<br><br>
+    • <strong>${monthLabel}</strong> <strong>${y}</strong> এর সকল রেকর্ড<br>
+    • সংশ্লিষ্ট মিল রেট<br><br>
+    এই কাজটি <strong>ফিরিয়ে আনা যাবে না</strong>। নিশ্চিত?
+  `;
+  deleteTargetId = '__month_year_delete__';
+  document.getElementById('confirmModal').classList.add('active');
+}
+
+// Delete mode tab switching
+function setupDeleteTabs(){
+  const tabs = document.querySelectorAll('.delete-tab-btn');
+  const monthPanel = document.getElementById('deleteModeMonth');
+  const yearPanel = document.getElementById('deleteModeYear');
+  tabs.forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      tabs.forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      const mode = tab.dataset.mode;
+      if(mode === 'month'){
+        monthPanel.style.display = 'block';
+        yearPanel.style.display = 'none';
+      }else{
+        monthPanel.style.display = 'none';
+        yearPanel.style.display = 'block';
+      }
+    });
+  });
+}
+
+// Populate delMonth dropdown with Bengali month names
+function populateDelMonthDropdown(){
+  const sel = document.getElementById('delMonth');
+  if(!sel) return;
+  sel.innerHTML = '';
+  MONTHS_BN.forEach((m,i)=>{ const o=document.createElement('option'); o.value=i; o.textContent=m; sel.appendChild(o); });
+}
+
+// ===== XLSX Upload =====
+async function loadSheetJS(){
+  if(window.XLSX) return;
+  await new Promise((res, rej)=>{
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js';
+    s.onload = res; s.onerror = rej;
+    document.head.appendChild(s);
+  });
+}
+
+async function handleXlsxUpload(){
+  const fileInput = document.getElementById('xlsxFile');
+  if(!fileInput.files || !fileInput.files[0]){ showToast('একটি .xlsx ফাইল নির্বাচন করুন', 'warning'); return; }
+  const m = parseInt(document.getElementById('upMonth').value);
+  const y = parseInt(document.getElementById('upYear').value);
+  if(isNaN(y) || y < 2020 || y > 2099){ showToast('সাল সঠিকভাবে দিন (2020-2099)', 'error'); return; }
+  const file = fileInput.files[0];
+  showLoading('ফাইল পড়া হচ্ছে...');
+  try{
+    await loadSheetJS();
+    const data = await file.arrayBuffer();
+    const wb = XLSX.read(data, {type:'array'});
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(ws, {header:1, defval:''});
+
+    // Find header row (look for "নাম" or "Name")
+    let headerIdx = -1;
+    const headerMap = {};
+    for(let i=0; i<Math.min(rows.length, 10); i++){
+      const row = rows[i];
+      let matchCount = 0;
+      row.forEach((cell, j)=>{
+        const cellStr = String(cell||'').trim().toLowerCase();
+        if(cellStr === 'নাম' || cellStr === 'name') { headerMap.name = j; matchCount++; }
+        else if(cellStr === 'পদবী' || cellStr === 'designation') { headerMap.designation = j; matchCount++; }
+        else if(cellStr.includes('সকাল')) { headerMap.breakfast = j; matchCount++; }
+        else if(cellStr.includes('দুপুর')) { headerMap.lunch = j; matchCount++; }
+        else if(cellStr.includes('অতিরিক্ত')) { headerMap.extra = j; matchCount++; }
+        else if(cellStr.includes('জমা') && !cellStr.includes('অগ্রিম')) { headerMap.deposit = j; matchCount++; }
+        else if(cellStr.includes('অগ্রিম')) { headerMap.nextAdvance = j; matchCount++; }
+      });
+      if(matchCount >= 2){ headerIdx = i; break; }
+    }
+    if(headerIdx === -1){
+      showToast('হেডার পাওয়া যায়নি। "নাম" কলাম দরকার।', 'error');
+      hideLoading();
+      return;
+    }
+
+    // Get rates
+    const rates = await getRates(y, m);
+    // Get existing max serial
+    const q = query(collection(db, 'records'), where('year','==',y), where('month','==',m));
+    const snap = await getDocsFromServer(q);
+    let serial = 0;
+    snap.forEach(d=>{ const s = d.data().serial || 0; if(s > serial) serial = s; });
+
+    // Parse data rows
+    const parsed = [];
+    for(let i = headerIdx + 1; i < rows.length; i++){
+      const row = rows[i];
+      const name = headerMap.name !== undefined ? String(row[headerMap.name]||'').trim() : '';
+      if(!name) continue; // skip empty rows
+      const designation = headerMap.designation !== undefined ? String(row[headerMap.designation]||'').trim() : '';
+      const bf = parseFloat(row[headerMap.breakfast]) || 0;
+      const ln = parseFloat(row[headerMap.lunch]) || 0;
+      const ex = parseFloat(row[headerMap.extra]) || 0;
+      const dep = parseFloat(row[headerMap.deposit]) || 0;
+      const nextAdvRaw = row[headerMap.nextAdvance];
+      const nextAdvHasValue = (nextAdvRaw !== '' && nextAdvRaw !== undefined && nextAdvRaw !== null && !isNaN(parseFloat(nextAdvRaw)));
+      const nextAdv = nextAdvHasValue ? parseFloat(nextAdvRaw) : 0;
+      const totalBill = calcTotalBill(bf, ln, ex, rates.breakfast, rates.lunch);
+      const dueAdv = calcDueAdvance(dep, totalBill);
+      // যদি nextAdvance কলামে কোনো ডাটা না থাকে, তবে null (খালি) সেভ হবে — 0 নয়
+      const finalNextAdv = nextAdvHasValue ? nextAdv : null;
+      serial++;
+      parsed.push({
+        year: y, month: m, serial,
+        name, designation, breakfast: bf, lunch: ln, extraCost: ex,
+        totalBill, totalDeposit: dep, dueAdvance: dueAdv, nextMonthAdvance: finalNextAdv,
+        breakfastRate: rates.breakfast, lunchRate: rates.lunch, createdAt: new Date().toISOString()
+      });
+    }
+
+    if(parsed.length === 0){
+      showToast('ফাইলে কোনো বৈধ ডাটা পাওয়া যায়নি', 'warning');
+      hideLoading();
+      return;
+    }
+
+    showLoading('ডাটাবেসে সেভ হচ্ছে...');
+    // Batch write (max 500 per batch)
+    let batch = writeBatch(db);
+    let count = 0;
+    for(let i=0; i<parsed.length; i++){
+      const newRef = doc(collection(db, 'records'));
+      batch.set(newRef, parsed[i]);
+      count++;
+      if(count % 400 === 0){
+        await batch.commit();
+        batch = writeBatch(db);
+      }
+    }
+    if(count % 400 !== 0) await batch.commit();
+
+    document.getElementById('uploadResult').innerHTML = `<div class="alert alert-success"><i class="bi bi-check-circle-fill"></i> <strong>${count}</strong> টি রেকর্ড সফলভাবে আপলোড হয়েছে (${getMonthLabel(m)} ${y})</div>`;
+    showToast(`${count} রেকর্ড আপলোড হয়েছে!`, 'success');
+    // Update cache immediately with all uploaded records
+    parsed.forEach(r => allRecordsCache.push(r));
+    availableYears.add(y); availableMonths.add(m);
+    if(!yearMonthMap[y]) yearMonthMap[y] = new Set();
+    yearMonthMap[y].add(m);
+    populateYearDropdowns();
+    populateMonthDropdowns();
+    document.getElementById('upYear').value = y;
+    document.getElementById('upMonth').value = m;
+    // Refresh all views from cache (no spinner)
+    await refreshDashboardFromCache();
+    await refreshManageFromCache();
+    broadcastDataChange();
+    fileInput.value = '';
+  }catch(e){
+    showToast('ত্রুটি: '+e.message, 'error');
+    console.error(e);
+  }finally{ hideLoading(); }
+}
+
+// ===== Export =====
+async function fetchRecordsForExport(year, month){
+  const q = query(collection(db, 'records'), where('year','==',year), where('month','==',month));
+  const snap = await getDocsFromServer(q);
+  const arr = [];
+  snap.forEach(d=> arr.push({id: d.id, ...d.data()}));
+  arr.sort((a,b)=> (a.serial||0)-(b.serial||0));
+  return arr;
+}
+
+async function handleExportLoad(){
+  showToast('মাস ও সাল নির্বাচন করুন।', 'info');
+}
+
+async function handleDlXlsx(){
+  if(!firebaseReady){ showToast('Firebase প্রস্তুত নয়', 'error'); return; }
+  const m = parseInt(document.getElementById('expMonth').value);
+  const y = parseInt(document.getElementById('expYear').value);
+  showLoading('XLSX তৈরি হচ্ছে...');
+  try{
+    await loadSheetJS();
+    const records = await fetchRecordsForExport(y, m);
+    const rates = await getRates(y, m);
+    // Layout:
+    // Row 0: Title (merged across cols 0-9)
+    // Row 1: Subtitle (year - month) (merged)
+    // Row 2: empty
+    // Row 3: "মিল রেট →" label in col 2, breakfast rate in col 3 (সকাল নাস্তা), lunch rate in col 4 (দুপুর মিল)
+    // Row 4: empty
+    // Row 5: Header row
+    //   Col indices: 0=ক্রমিক, 1=নাম, 2=পদবী, 3=সকাল নাস্তা, 4=দুপুর মিল, 5=অতিরিক্ত খরচ, 6=মোট বিল, 7=মোট জমা, 8=বকেয়া/অগ্রিম, 9=অগ্রিম জমা
+    // Row 6+: data
+    // Last row: totals
+    const wsData = [];
+    wsData.push(['ক্যান্টিন মিল হিসাব','','','','','','','','','']);
+    wsData.push([`(${y} - ${MONTHS_BN[m]})`,'','','','','','','','','']);
+    wsData.push(['','','','','','','','','','']);
+    // Meal rate row: label in col 0-2 (merged), breakfast rate in col 3, lunch rate in col 4
+    wsData.push(['মিল রেট','','',rates.breakfast, rates.lunch,'','','','','']);
+    wsData.push(['','','','','','','','','','']);
+    wsData.push(['ক্রমিক','নাম','পদবী','সকাল নাস্তা','দুপুর মিল','অতিরিক্ত খরচ','মোট বিল','মোট জমা','বকেয়া/অগ্রিম','পরবর্তী মাসের অগ্রিম জমা']);
+    let tBf=0,tLn=0,tEx=0,tBill=0,tDep=0,tNext=0;
+    let anyNext = false;
+    records.forEach((r,i)=>{
+      const bf = Number(r.breakfast)||0, ln = Number(r.lunch)||0, ex = Number(r.extraCost)||0;
+      const bill = Number(r.totalBill)||0, dep = Number(r.totalDeposit)||0;
+      const da = Number(r.dueAdvance)||0;
+      const nextRaw = r.nextMonthAdvance;
+      const hasNext = !(nextRaw === null || nextRaw === undefined || nextRaw === '' || isNaN(nextRaw));
+      const next = hasNext ? Number(nextRaw) : null;
+      if(hasNext){ anyNext = true; tNext += next; }
+      tBf+=bf;tLn+=ln;tEx+=ex;tBill+=bill;tDep+=dep;
+      wsData.push([i+1, r.name||'', r.designation||'', bf, ln, ex, bill, dep, da, (next === null ? '' : next)]);
+    });
+    const net = tDep - tBill;
+    const totalNextDisplay = anyNext ? tNext : '';
+    wsData.push(['মোট','','',tBf,tLn,tEx,tBill,tDep,net,totalNextDisplay]);
+    const ws = XLSX.utils.aoa_to_sheet(wsData);
+    // Column widths in PIXELS (using wpx for pixel-based widths)
+    // কলাম প্রস্ব — নাম ও পদবী ছোট, বাকি হেডার অনুযায়ী
+    ws['!cols'] = [
+      {wpx:45},   // 0: ক্রমিক
+      {wpx:160},  // 1: নাম
+      {wpx:130},  // 2: পদবী
+      {wpx:85},   // 3: সকাল নাস্তা
+      {wpx:75},   // 4: দুপুর মিল
+      {wpx:95},   // 5: অতিরিক্ত খরচ
+      {wpx:70},   // 6: মোট বিল
+      {wpx:70},   // 7: মোট জমা
+      {wpx:95},   // 8: বকেয়া/অগ্রিম
+      {wpx:120}   // 9: পরবর্তী মাসের অগ্রিম জমা
+    ];
+    // Row heights — হেডার চিকন, ডাটা rows চিকন
+    ws['!rows'] = [
+      {hpt:30}, // Title row
+      {hpt:22}, // Subtitle row
+      {hpt:6},  // empty
+      {hpt:22}, // Meal rate row
+      {hpt:6},  // empty
+      {hpt:22}, // Header row — উচ্চতা আরও কমানো হলো
+      ...records.map(()=>({hpt:18})), // Data rows — চিকন
+      {hpt:22}  // Total row — চিকন
+    ];
+    // Merge title cells (cols 0-9 for rows 0, 1, 3)
+    ws['!merges'] = [
+      {s:{r:0,c:0},e:{r:0,c:9}}, // Title row
+      {s:{r:1,c:0},e:{r:1,c:9}}, // Subtitle row
+      {s:{r:3,c:0},e:{r:3,c:2}}   // "মিল রেট" label spans cols 0-2
+    ];
+    // Style each cell
+    const range = XLSX.utils.decode_range(ws['!ref']);
+    const GREEN_HEADER = 'C8E6C9';   // light green for header bg
+    const GREEN_RATE = 'E8F5E9';     // lighter green for rate row
+    const POS_GREEN = '1B5E20';      // dark green text for positive
+    const NEG_RED = 'B71C1C';         // dark red text for negative
+    const HEADER_ROW = 5;
+    const RATE_ROW = 3;
+    const TOTAL_ROW = range.e.r;
+    const DUE_COL = 8;  // বকেয়া/অগ্রিম column
+    for(let R = range.s.r; R <= range.e.r; R++){
+      for(let C = range.s.c; C <= range.e.c; C++){
+        const cellRef = XLSX.utils.encode_cell({r:R, c:C});
+        if(!ws[cellRef]) continue;
+        const isHeader = (R === HEADER_ROW);
+        const isRateRow = (R === RATE_ROW);
+        const isTotalRow = (R === TOTAL_ROW);
+        const isTitleRow = (R === 0);
+        const isSubtitleRow = (R === 1);
+        // Determine font color for due/advance column
+        let fontColor = '000000'; // default black
+        let fontBold = false;
+        let fontSize = 11;
+        let fill = undefined;
+        if(isTitleRow){ fontBold = true; fontSize = 16; }
+        else if(isSubtitleRow){ fontBold = true; fontSize = 12; }
+        else if(isHeader){
+          fontBold = true; fontSize = 9; // Header font size ছোট করা হলো (11 → 9)
+          fill = {fgColor:{rgb:GREEN_HEADER}};
+        }
+        else if(isRateRow){
+          fontBold = true; fontSize = 11;
+          fill = {fgColor:{rgb:GREEN_RATE}};
+        }
+        else if(isTotalRow){
+          fontBold = true; fontSize = 11;
+          fill = {fgColor:{rgb:'FFF8E1'}};
+        }
+        else {
+          fontSize = 10; // Data rows — স্ট্যান্ডার্ড সাইজ
+        }
+        // Color coding for due/advance column (col 8) — only for data rows + total row
+        if(C === DUE_COL && (R > HEADER_ROW)){
+          let val = ws[cellRef].v;
+          if(typeof val === 'string' && val !== ''){
+            val = parseFloat(val);
+          }
+          if(typeof val === 'number' && !isNaN(val)){
+            if(val > 0){
+              fontColor = POS_GREEN; // green for positive (advance)
+              fontBold = true;
+            }else if(val < 0){
+              fontColor = NEG_RED; // red for negative (due)
+              fontBold = true;
+            }
+          }
+        }
+        // Determine cell alignment: নাম/পদবী এখন সেলের মাঝ বরাবর (center)
+        let cellAlign = 'center';
+        ws[cellRef].s = {
+          alignment: {horizontal:cellAlign, vertical:'center', wrapText:true, indent:0},
+          font: {color:{rgb:fontColor}, bold: fontBold, sz: fontSize, name:'Calibri'},
+          fill: fill,
+          border: {
+            top: {style:'thin', color:{rgb:'000000'}},
+            bottom: {style:'thin', color:{rgb:'000000'}},
+            left: {style:'thin', color:{rgb:'000000'}},
+            right: {style:'thin', color:{rgb:'000000'}}
+          }
+        };
+      }
+    }
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'ক্যান্টিন');
+    XLSX.writeFile(wb, `ক্যান্টিন_হিসাব_${y}_${MONTHS_EN[m]}.xlsx`);
+    showToast('XLSX ডাউনলোড হয়েছে!', 'success');
+  }catch(e){
+    showToast('ত্রুটি: '+e.message, 'error');
+  }finally{ hideLoading(); }
+}
+
+async function handleDlPdf(){
+  if(!firebaseReady){ showToast('Firebase প্রস্তুত নয়', 'error'); return; }
+  const m = parseInt(document.getElementById('expMonth').value);
+  const y = parseInt(document.getElementById('expYear').value);
+  showLoading('PDF তৈরি হচ্ছে...');
+  try{
+    const records = await fetchRecordsForExport(y, m);
+    const rates = await getRates(y, m);
+    if(records.length === 0){
+      showToast('এই মাসের জন্য কোনো ডাটা নেই', 'warning');
+      hideLoading();
+      return;
+    }
+    let tBf=0,tLn=0,tEx=0,tBill=0,tDep=0,tNext=0;
+    let rowsHtml = '';
+    let anyNextHasValue = false;
+    records.forEach((r,i)=>{
+      const bf = Number(r.breakfast)||0, ln = Number(r.lunch)||0, ex = Number(r.extraCost)||0;
+      const bill = Number(r.totalBill)||0, dep = Number(r.totalDeposit)||0;
+      const da = Number(r.dueAdvance)||0;
+      const nextRaw = r.nextMonthAdvance;
+      const hasNext = !(nextRaw === null || nextRaw === undefined || nextRaw === '' || isNaN(nextRaw));
+      const next = hasNext ? Number(nextRaw) : null;
+      if(hasNext){ anyNextHasValue = true; tNext += next; }
+      tBf+=bf;tLn+=ln;tEx+=ex;tBill+=bill;tDep+=dep;
+      const daSign = da >= 0 ? '+' : '';
+      const nextDisplay = hasNext ? fmt(next) : '';
+      // Color classes: positive=green, negative=red, zero=black
+      const daClass = da > 0 ? 'pos' : (da < 0 ? 'neg' : '');
+      const nextClass = (next !== null && next > 0) ? 'pos' : ((next !== null && next < 0) ? 'neg' : '');
+      rowsHtml += `<tr>
+        <td>${i+1}</td><td>${r.name||'-'}</td><td>${r.designation||'-'}</td>
+        <td>${fmt(bf)}</td><td>${fmt(ln)}</td><td>${fmt(ex)}</td>
+        <td>${fmt(bill)}</td><td>${fmt(dep)}</td>
+        <td class="${daClass}">${daSign}${fmt(da)}</td><td class="${nextClass}">${nextDisplay}</td>
+      </tr>`;
+    });
+    const net = tDep - tBill;
+    const netSign = net >= 0 ? '+' : '';
+    const totalNextDisplay = anyNextHasValue ? fmt(tNext) : '';
+    const netClass = net > 0 ? 'pos' : (net < 0 ? 'neg' : '');
+    const totalRow = `<tr class="total-row">
+      <td colspan="3">মোট (${getMonthLabel(m)} ${y})</td>
+      <td>${fmt(tBf)}</td><td>${fmt(tLn)}</td><td>${fmt(tEx)}</td>
+      <td>${fmt(tBill)}</td><td>${fmt(tDep)}</td>
+      <td class="${netClass}">${netSign}${fmt(net)}</td><td>${totalNextDisplay}</td>
+    </tr>`;
+    const html = `<!DOCTYPE html><html lang="bn"><head>
+<meta charset="UTF-8"><title>ক্যান্টিন মিল হিসাব - ${getMonthLabel(m)} ${y}</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+@page { size: A4 landscape; margin: 8mm; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Hind Siliguri', sans-serif; color: #000; padding: 12px; }
+.header { text-align: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #000; }
+.header h1 { font-size: 20px; color: #000; margin-bottom: 3px; }
+.header .subtitle { font-size: 14px; color: #000; }
+.header .rates { font-size: 12px; color: #000; margin-top: 3px; }
+/* টেবিল, হেডার ও সিগনেচার একই প্রস্থে সেন্টারে রাখার জন্য কন্টেইনার */
+.doc-container { width: fit-content; max-width: 100%; margin: 0 auto; }
+/* table-layout: fixed + width: auto — কলাম প্রস্বের সমষ্টি টেবিলের প্রস্ব হবে */
+table { width: auto; border-collapse: collapse; font-size: 10.5px; table-layout: fixed; }
+th, td { height: 24px; padding: 2px 3px; border: 1px solid #000; text-align: center; color: #000; word-break: break-word; line-height: 1.2; vertical-align: middle; overflow: hidden; }
+th { background: #C8E6C9; color: #000 !important; font-weight: 700; white-space: normal; }
+td.left, th.left { text-align: left; }
+/* কলাম প্রস্ব — কম্প্যাক্ট স্ট্যান্ডার্ড সাইজ */
+th:nth-child(1), td:nth-child(1) { width: 30px; } /* ক্রমিক */
+th:nth-child(2), td:nth-child(2) { width: 95px; text-align: center; } /* নাম — সেলের মাঝ বরাবর */
+th:nth-child(3), td:nth-child(3) { width: 85px; text-align: center; } /* পদবী — সেলের মাঝ বরাবর */
+th:nth-child(4), td:nth-child(4) { width: 50px; white-space: normal; } /* সকাল নাস্তা */
+th:nth-child(5), td:nth-child(5) { width: 50px; white-space: normal; } /* দুপুর মিল */
+th:nth-child(6), td:nth-child(6) { width: 70px; white-space: normal; } /* অতিরিক্ত খরচ(টাকা) */
+th:nth-child(7), td:nth-child(7) { width: 65px; white-space: normal; } /* মোট বিল(টাকা) */
+th:nth-child(8), td:nth-child(8) { width: 65px; white-space: normal; } /* মোট জমা(টাকা) */
+th:nth-child(9), td:nth-child(9) { width: 75px; white-space: normal; } /* বকেয়া/অগ্রিম(টাকা) */
+th:nth-child(10), td:nth-child(10) { width: 90px; white-space: normal; color: #000 !important; } /* পরবর্তী মাসের অগ্রিম জমা — সর্বদা কালো */
+tfoot td { background: #FFF8E1; font-weight: 700; border-top: 2px solid #000; color: #000; }
+.total-row td { background: #FFF8E1 !important; font-weight: 700; }
+/* Color coding for বকেয়া/অগ্রিম + অগ্রিম জমা columns */
+.pos { color: #1B7A3D !important; font-weight: 700; }
+.neg { color: #C62828 !important; font-weight: 700; }
+/* পরবর্তী মাসের অগ্রিম জমা কলামের ডাটা সর্বদা কালো (nextClass override) */
+td.next-black { color: #000 !important; font-weight: 700; }
+.signature { margin-top: 35px; display: flex; justify-content: space-between; font-size: 11px; width: 100%; }
+.sig-block { text-align: center; flex: 1; }
+.sig-line { margin-top: 30px; border-top: 1px dashed #000; padding-top: 3px; }
+.footer { margin-top: 20px; text-align: center; font-size: 10px; color: #555; border-top: 1px solid #999; padding-top: 5px; }
+</style></head><body>
+<div class="doc-container">
+<div class="header">
+  <h1>ক্যান্টিন মিল হিসাব</h1>
+  <div class="subtitle">${y} সাল - ${getMonthLabel(m)} মাস</div>
+  <div class="rates">সকাল নাস্তা রেট: ৳${rates.breakfast} | দুপুর মিল রেট: ৳${rates.lunch}</div>
+</div>
+<table>
+  <thead><tr>
+    <th>ক্রমিক</th><th>নাম</th><th>পদবী</th>
+    <th>সকাল<br>নাস্তা</th><th>দুপুর<br>মিল</th><th>অতিরিক্ত<BR>খরচ<br>(টাকা)</th>
+    <th>মোট<BR>বিল<br>(টাকা)</th><th>মোট<BR>জমা<br>(টাকা)</th><th>বকেয়া/<br>অগ্রিম<br>(টাকা)</th><th>পরবর্তী<br>মাসের অগ্রিম<BR>জমা</th>
+  </tr></thead>
+  <tbody>${rowsHtml}</tbody>
+  <tfoot>${totalRow}</tfoot>
+</table>
+<div class="signature">
+  <div class="sig-block"><div class="sig-line">প্রস্তুতকারী</div></div>
+  <div class="sig-block"><div class="sig-line">যাচাইকারী</div></div>
+  <div class="sig-block"><div class="sig-line">অনুমোদনকারী</div></div>
+</div>
+</div>
+<div class="footer">ক্যান্টিন সিস্টেম থেকে তৈরি</div>
+<div class="no-print" style="text-align:center;margin-top:15px">
+  <button onclick="window.print()" style="padding:8px 20px;background:#000;color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit">প্রিন্ট / PDF সেভ</button>
+</div>
+<script>window.onload = function(){ setTimeout(function(){ window.print(); }, 400); };<\/script>
+</body></html>`;
+    const w = window.open('', '_blank');
+    if(!w){ showToast('পপআপ ব্লক করা হয়েছে।', 'warning'); }
+    else{
+      w.document.open();
+      w.document.write(html);
+      w.document.close();
+      showToast('PDF উইন্ডো খোলা হয়েছে।', 'info', 5000);
+    }
+  }catch(e){
+    showToast('ত্রুটি: '+e.message, 'error');
+  }finally{ hideLoading(); }
+}
+
+// ===== DOM READY =====
+function onDOMReady(){
+  initFirebase();
+  loadSavedUsernames();
+  setupCrossTabSync();
+
+  // Password toggle
+  document.querySelectorAll('.input-icon[data-target]').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      e.preventDefault();
+      const target = document.getElementById(btn.dataset.target);
+      if(!target) return;
+      if(target.type === 'password'){
+        target.type = 'text';
+        btn.innerHTML = '<i class="bi bi-eye-slash"></i>';
+      }else{
+        target.type = 'password';
+        btn.innerHTML = '<i class="bi bi-eye"></i>';
+      }
+    });
+  });
+
+  // Auth page nav links
+  const bindNav = (id, target) => {
+    const el = document.getElementById(id);
+    if(el) el.addEventListener('click', (e)=>{ e.preventDefault(); showAuthPage(target); });
+  };
+  bindNav('goSignup','signupPage');
+  bindNav('goSignin','signinPage');
+  bindNav('goForgot','forgotPage');
+  bindNav('goSignin2','signinPage');
+
+  // Auth form handlers
+  document.getElementById('signupForm').addEventListener('submit', handleSignup);
+  document.getElementById('signinForm').addEventListener('submit', handleSignin);
+  document.getElementById('forgotForm').addEventListener('submit', handleForgot);
+  document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+
+  // Enter key দিয়ে সাইন ইন ফর্ম সাবমিট নিশ্চিত করা (ডাটালিস্ট বা অন্য কারণে ব্লক হলে)
+  ['signinEmail','signinPassword'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el){
+      el.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter' || e.keyCode === 13){
+          e.preventDefault();
+          document.getElementById('signinForm').requestSubmit();
+        }
+      });
+    }
+  });
+
+  // Mobile menu
+  const menuToggle = document.getElementById('menuToggle');
+  const appNav = document.getElementById('appNav');
+  const navBackdrop = document.getElementById('navBackdrop');
+  const navCloseMobile = document.getElementById('navCloseMobile');
+  function closeMobileMenu(){ appNav.classList.remove('open'); navBackdrop.classList.remove('active'); }
+  if(menuToggle) menuToggle.addEventListener('click', ()=>{ appNav.classList.add('open'); navBackdrop.classList.add('active'); });
+  if(navCloseMobile) navCloseMobile.addEventListener('click', closeMobileMenu);
+  if(navBackdrop) navBackdrop.addEventListener('click', closeMobileMenu);
+
+  // Nav switching
+  document.querySelectorAll('.nav-item').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const page = btn.dataset.page;
+      document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+      const pageEl = document.getElementById('page-'+page);
+      if(pageEl) pageEl.classList.add('active');
+      closeMobileMenu();
+      window.scrollTo({top:0, behavior:'smooth'});
+      // Auto-load only specific pages
+      if(page === 'dashboard') await loadDashboard(true);
+      if(page === 'manage') await loadManage(true);
+      if(page === 'rates') await loadRate(true);
+      if(page === 'complaints') await loadComplaints();
+      if(page === 'add'){ const m = parseInt(document.getElementById('addMonth').value); const y = parseInt(document.getElementById('addYear').value); currentRates = await getRates(y, m); updateAddCalcPreview(); }
+    });
+  });
+
+  // Load buttons (explicit)
+  document.getElementById('loadDashBtn').addEventListener('click', ()=>loadDashboard(false));
+  document.getElementById('loadManageBtn').addEventListener('click', ()=>loadManage(false));
+  document.getElementById('loadRateBtn').addEventListener('click', ()=>loadRate(false));
+  document.getElementById('refreshComplaintsBtn').addEventListener('click', ()=>loadComplaints());
+  // বাল্ক ডিলিট বাটন
+  document.getElementById('bulkDeleteCompBtn').addEventListener('click', async ()=>{
+    const checked = document.querySelectorAll('.comp-check:checked');
+    if(checked.length === 0) return;
+    if(!confirm(`নির্বাচিত ${checked.length} টি অভিযোগ ডিলিট করতে চান?`)) return;
+    showLoading('ডিলিট হচ্ছে...');
+    try{
+      const batch = writeBatch(db);
+      checked.forEach(cb=>{
+        const id = cb.dataset.compId;
+        batch.delete(doc(db, 'complaints', id));
+        // cache থেকেও সরাও
+        const idx = allComplaintsCache.findIndex(c=>c.id===id);
+        if(idx >= 0) allComplaintsCache.splice(idx, 1);
+      });
+      await batch.commit();
+      showToast(`${checked.length} টি অভিযোগ ডিলিট হয়েছে`, 'success');
+      renderComplaintsTable();
+    }catch(e){ showToast('ত্রুটি: '+e.message, 'error'); }
+    finally{ hideLoading(); }
+  });
+  // অভিযোগ পেজের মাস/সাল dropdown populate
+  const compMonthEl = document.getElementById('compMonth');
+  const compYearEl = document.getElementById('compYear');
+  if(compMonthEl){
+    MONTHS_BN.forEach((m,i)=>{ const opt = document.createElement('option'); opt.value=i; opt.textContent=m; compMonthEl.appendChild(opt); });
+    compMonthEl.value = currentBnMonth();
+  }
+  if(compYearEl){
+    const cy = currentBnYear();
+    for(let y=cy-3; y<=cy+1; y++){ const opt = document.createElement('option'); opt.value=y; opt.textContent=y; compYearEl.appendChild(opt); }
+    compYearEl.value = cy;
+  }
+  const loadCompBtn = document.getElementById('loadComplaintsBtn');
+  if(loadCompBtn) loadCompBtn.addEventListener('click', ()=>loadComplaints());
+  const compSearchEl = document.getElementById('compSearch');
+  if(compSearchEl) compSearchEl.addEventListener('input', ()=>renderComplaintsTable());
+  document.getElementById('goToManage').addEventListener('click', ()=>{
+    document.querySelector('.nav-item[data-page="manage"]').click();
+  });
+
+  // গ্লোবাল সার্চ — টাইপ করার সাথে সাথে ফিল্টার হবে (spinner ছাড়া)
+  const manageSearchEl = document.getElementById('manageSearch');
+  if(manageSearchEl){
+    manageSearchEl.addEventListener('input', ()=>{
+      refreshManageFromCache();
+    });
+  }
+
+  // Add form
+  ['fBreakfast','fLunch','fExtra','fDeposit','fNextAdvance'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.addEventListener('input', updateAddCalcPreview);
+  });
+  document.getElementById('addForm').addEventListener('submit', handleAddSubmit);
+  document.getElementById('resetAddForm').addEventListener('click', ()=>{
+    document.getElementById('addForm').reset();
+    ['fBreakfast','fLunch','fExtra','fDeposit','fNextAdvance'].forEach(id=>{ const el = document.getElementById(id); if(el) el.value = ''; });
+    updateAddCalcPreview();
+  });
+
+  // ===== Enter key → next field (add form) =====
+  const addFieldOrder = ['fName','fDesignation','fBreakfast','fLunch','fExtra','fDeposit','fNextAdvance'];
+  addFieldOrder.forEach((id, idx)=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.dataset.enterHandled = 'true'; // Mark as handled — global handler কে skip করতে
+    el.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        e.stopPropagation(); // global handler কে আটাও
+        // Move to next field
+        if(idx + 1 < addFieldOrder.length){
+          const nextEl = document.getElementById(addFieldOrder[idx + 1]);
+          if(nextEl){ nextEl.focus(); nextEl.select(); }
+        }else{
+          // Last field — submit the form
+          document.getElementById('addForm').dispatchEvent(new Event('submit', {cancelable:true}));
+        }
+      }
+    });
+  });
+
+  // Edit form - same Enter-key behavior
+  const editFieldOrder = ['eName','eDesignation','eBreakfast','eLunch','eExtra','eDeposit','eNextAdvance'];
+  editFieldOrder.forEach((id, idx)=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.dataset.enterHandled = 'true'; // Mark as handled
+    el.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        e.stopPropagation(); // global handler কে আটাও
+        if(idx + 1 < editFieldOrder.length){
+          const nextEl = document.getElementById(editFieldOrder[idx + 1]);
+          if(nextEl){ nextEl.focus(); nextEl.select(); }
+        }else{
+          document.getElementById('saveEditBtn').click();
+        }
+      }
+    });
+  });
+
+  // Edit form
+  ['eBreakfast','eLunch','eExtra','eDeposit'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.addEventListener('input', updateEditCalc);
+  });
+  document.getElementById('saveEditBtn').addEventListener('click', handleSaveEdit);
+
+  // Confirm delete
+  document.getElementById('confirmYesBtn').addEventListener('click', handleConfirmDelete);
+
+  // Close modals
+  document.querySelectorAll('[data-close]').forEach(b=>{
+    b.addEventListener('click', ()=>{ const t = document.getElementById(b.dataset.close); if(t) t.classList.remove('active'); });
+  });
+  document.querySelectorAll('.modal-overlay').forEach(o=>{
+    o.addEventListener('click', (e)=>{ if(e.target === o) o.classList.remove('active'); });
+  });
+
+  // Rate save
+  document.getElementById('saveRateBtn').addEventListener('click', handleSaveRate);
+
+  // Upload
+  document.getElementById('uploadBtn').addEventListener('click', handleXlsxUpload);
+
+  // Export
+  document.getElementById('dlPdfBtn').addEventListener('click', handleDlPdf);
+  document.getElementById('dlXlsxBtn').addEventListener('click', handleDlXlsx);
+
+  // Delete panel
+  document.getElementById('deleteUnlockBtn').addEventListener('click', handleDeleteUnlock);
+  document.getElementById('confirmDelBtn').addEventListener('click', handleConfirmDelBtn);
+  const confirmDelMonthBtn = document.getElementById('confirmDelMonthBtn');
+  if(confirmDelMonthBtn) confirmDelMonthBtn.addEventListener('click', handleConfirmDelMonthBtn);
+  setupDeleteTabs();
+  populateDelMonthDropdown();
+
+  // Auto-logout events
+  ['click','mousedown','keydown','touchstart','scroll','mousemove'].forEach(evt=>{
+    document.addEventListener(evt, ()=>{
+      if(auth && auth.currentUser){
+        if(!document._lastReset || Date.now() - document._lastReset > 30000){
+          document._lastReset = Date.now();
+          resetInactivityTimer();
+        }
+      }
+    }, {passive:true});
+  });
+
+  // Visibility change — refresh when tab becomes visible + reset inactivity timer
+  document.addEventListener('visibilitychange', ()=>{
+    if(!document.hidden && auth && auth.currentUser){
+      // Reset inactivity timer when tab becomes visible (so user isn't logged out just because they were in another tab)
+      resetInactivityTimer();
+      const activePage = document.querySelector('.nav-item.active');
+      if(activePage){
+        const page = activePage.dataset.page;
+        if(page === 'dashboard') loadDashboard(true);
+        if(page === 'manage') loadManage(true);
+      }
+    }
+  });
+
+  // ===== Global Enter key → next field (সব ফর্মের জন্য) =====
+  // শুধু তখনই কাজ করবে যখন specific handler নেই (specific handler ফিল্ড অর্ডার মেনে চলে)
+  document.addEventListener('keydown', (e)=>{
+    if(e.key !== 'Enter') return;
+    const el = document.activeElement;
+    if(!el || !el.matches('input, select, textarea')) return;
+    if(el.tagName === 'TEXTAREA') return; // textarea এ Enter = newline
+    if(el.type === 'submit' || el.tagName === 'BUTTON') return;
+    // যদি specific handler দ্বারা handle করা হয়ে থাকে, skip করো
+    if(el.dataset.enterHandled === 'true') return;
+    e.preventDefault();
+    // একই ফর্মের পরের focusable element খুঁজি
+    const form = el.closest('form') || el.closest('.card') || el.closest('.modal');
+    if(!form) return;
+    const focusable = Array.from(form.querySelectorAll('input:not([type="hidden"]):not([disabled]):not([readonly]), select, textarea, button[type="submit"]'));
+    const idx = focusable.indexOf(el);
+    if(idx >= 0 && idx + 1 < focusable.length){
+      focusable[idx + 1].focus();
+      if(focusable[idx + 1].select) focusable[idx + 1].select();
+    }
+  });
+
+  updateAddCalcPreview();
+  console.log('✓ ক্যান্টিন অ্যাপ্লিকেশন লোড সম্পূর্ণ');
+}
+
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', onDOMReady);
+}else{
+  onDOMReady();
+}
+
+// ===== Service Worker Registration (PWA install) =====
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('/sw-index.js', {scope: '/'})
+      .then((registration)=>{
+        console.log('[SW-index] ✓ Registered with scope:', registration.scope);
+      })
+      .catch((err)=>{
+        console.warn('[SW-index] Registration failed:', err.message);
+      });
+  });
+}
+</script>
+</body>
+</html>
