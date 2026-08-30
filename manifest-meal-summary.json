@@ -1,0 +1,21 @@
+{
+  "id": "/meal-summary?source=app",
+  "name": "ক্যান্টিন — মাসিক সারাংশ",
+  "short_name": "মাসিক সারাংশ",
+  "description": "ক্যান্টিন মাসিক মিল হিসাব সারাংশ পাবলিক পেজ",
+  "start_url": "/meal-summary?source=app",
+  "scope": "/meal-summary",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f5f1ea",
+  "theme_color": "#1e40af",
+  "lang": "bn",
+  "dir": "ltr",
+  "icons": [
+    { "src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icons/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "categories": ["business", "productivity", "finance"]
+}
