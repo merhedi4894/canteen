@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+<meta name="theme-color" content="#1e40af" />
+<meta name="description" content="ক্যান্টিন — মিল অর্ডার সিস্টেম" />
+<title>ক্যান্টিন — মিল অর্ডার</title>
+<link rel="manifest" href="/manifest-meal-order.json" />
+<link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512x512.png" />
+<link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="ক্যান্টিন" />
+<meta name="mobile-web-app-capable" content="yes" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<style>
+:root{
+  --brand:#1e40af;--brand-2:#0891b2;--accent:#f59e0b;
+  --danger:#dc2626;--success:#16a34a;--warning:#d97706;
+  --bg:#f5f1ea;--card:#ffffff;--card-2:#f0ebe1;
+  --text-0:#1c1917;--text-1:#44403c;--text-2:#78716c;--text-3:#a8a29e;
+  --line:#e7e1d6;--shadow:0 4px 12px -2px rgba(28,25,23,.08);
+  --shadow-lg:0 20px 40px -12px rgba(28,25,42,.18);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Hind Siliguri','Inter',system-ui,sans-serif;background:var(--bg);color:var(--text-0);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.55}
+button,input,select,textarea{font-family:inherit;font-size:inherit}
+
+.pub-header{background:linear-gradient(135deg,#1e40af 0%,#0891b2 100%);color:white;padding:16px 24px;text-align:center;position:sticky;top:0;z-index:50;box-shadow:0 2px 12px -4px rgba(0,0,0,.2)}
+.pub-header .app-name{font-size:24px;font-weight:700;letter-spacing:-.3px}
+.pub-header .app-sub{font-size:12px;opacity:.85;margin-top:3px}
+
+/* নেভিগেশন বাটন */
+.nav-buttons{display:flex;gap:8px;padding:10px 16px;max-width:1200px;margin:0 auto;flex-wrap:wrap}
+.nav-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:10px;font-size:14px;font-weight:600;text-decoration:none;background:white;color:var(--text-1);border:1.5px solid var(--line);transition:all .15s;flex:1;justify-content:center;min-width:120px}
+.nav-btn:hover{border-color:var(--brand);color:var(--brand)}
+.nav-btn.active{background:linear-gradient(135deg,#1e40af 0%,#0891b2 100%);color:white;border-color:transparent}
+.nav-btn i{font-size:16px}
+
+.pub-main{padding:20px;max-width:600px;margin:0 auto;width:100%}
+
+/* লগইন সেকশন */
+.login-card{background:white;border-radius:14px;padding:28px 24px;box-shadow:var(--shadow);margin-bottom:16px;border:1px solid rgba(231,225,214,.6)}
+.login-card h2{font-size:18px;font-weight:700;color:var(--text-0);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.login-card h2 i{color:var(--brand)}
+.form-group{margin-bottom:14px}
+.form-label{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--text-1);margin-bottom:6px}
+.form-control{width:100%;padding:12px 14px;font-size:14px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--text-0);transition:all .15s}
+.form-control:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(30,64,175,.12)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:12px 20px;font-size:14px;font-weight:600;border:none;border-radius:10px;cursor:pointer;white-space:nowrap;transition:all .15s;width:100%}
+.btn-primary{background:linear-gradient(135deg,#1e40af 0%,#0891b2 100%);color:white;box-shadow:0 4px 12px -3px rgba(30,64,175,.3)}
+.btn-primary:hover{background:linear-gradient(135deg,#2563eb 0%,#0e7490 100%)}
+.btn-outline{background:transparent;border:1.5px solid var(--line);color:var(--text-1)}
+.btn-danger{background:var(--danger);color:white}
+
+/* ইউজার ইনফো */
+.user-info{background:white;border-radius:14px;padding:20px;box-shadow:var(--shadow);margin-bottom:16px;border:1px solid rgba(231,225,214,.6);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.user-info .user-details{flex:1}
+.user-info .user-name{font-size:18px;font-weight:700;color:var(--text-0)}
+.user-info .user-designation{font-size:13px;color:var(--text-2);margin-top:2px}
+.user-info .user-id{font-size:12px;color:var(--text-3);margin-top:2px}
+.logout-btn{padding:8px 14px;border-radius:8px;border:1.5px solid var(--line);background:white;color:var(--text-1);font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.logout-btn:hover{border-color:var(--danger);color:var(--danger)}
+
+/* অর্ডার ফর্ম */
+.order-card{background:white;border-radius:14px;padding:24px;box-shadow:var(--shadow);margin-bottom:16px;border:1px solid rgba(231,225,214,.6)}
+.order-card h3{font-size:16px;font-weight:700;color:var(--text-0);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.order-card h3 i{color:var(--brand)}
+
+/* রেডিও বাটন */
+.meal-options{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.meal-option{flex:1;min-width:120px}
+.meal-option input[type="radio"]{display:none}
+.meal-option label{display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 12px;border:2px solid var(--line);border-radius:12px;cursor:pointer;transition:all .15s;text-align:center}
+.meal-option label:hover{border-color:var(--brand)}
+.meal-option input[type="radio"]:checked + label{border-color:var(--brand);background:#eff6ff;color:var(--brand)}
+.meal-option label i{font-size:24px}
+.meal-option label .meal-name{font-size:14px;font-weight:600}
+.meal-option label .meal-desc{font-size:11px;color:var(--text-3)}
+.meal-option input[type="radio"]:checked + label .meal-desc{color:var(--brand)}
+
+/* স্পেশাল মিল আইটেম */
+.special-meal-info{background:#fef3c7;border:1.5px solid #fde68a;border-radius:10px;padding:12px 14px;margin-bottom:16px;display:none}
+.special-meal-info.active{display:block}
+.special-meal-info .special-label{font-size:13px;font-weight:700;color:#92400e;display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.special-meal-info .special-items{font-size:14px;color:#78350f;font-weight:600;line-height:1.5}
+
+/* গেস্ট মিল */
+.guest-section{margin-bottom:16px}
+.guest-section label{font-size:13px;font-weight:600;color:var(--text-1);display:block;margin-bottom:6px}
+.guest-section input{width:80px;padding:8px 10px;border:1.5px solid var(--line);border-radius:8px;font-size:14px;text-align:center}
+
+/* অর্ডার তালিকা */
+.orders-card{background:white;border-radius:14px;padding:20px;box-shadow:var(--shadow);margin-bottom:16px;border:1px solid rgba(231,225,214,.6)}
+.orders-card h3{font-size:16px;font-weight:700;color:var(--text-0);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.orders-card h3 i{color:var(--brand)}
+.orders-list{display:flex;flex-direction:column;gap:8px}
+.order-item{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:10px;background:var(--card-2);border:1px solid var(--line)}
+.order-item .order-info{flex:1}
+.order-item .order-date{font-size:14px;font-weight:600;color:var(--text-0)}
+.order-item .order-meal{font-size:12px;color:var(--text-2);margin-top:2px}
+.order-item .order-meal .meal-badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600;margin-right:6px}
+.order-item .order-meal .badge-breakfast{background:#fef3c7;color:#92400e}
+.order-item .order-meal .badge-lunch{background:#dbeafe;color:#1e40af}
+.order-item .order-meal .badge-special{background:#fce7f3;color:#be185d}
+.order-item .order-count{font-size:13px;font-weight:700;color:var(--brand)}
+.order-item .delete-btn{padding:4px 8px;border:none;background:none;color:var(--danger);cursor:pointer;font-size:16px;border-radius:6px}
+.order-item .delete-btn:hover{background:#fef2f2}
+
+.empty-orders{text-align:center;padding:30px 20px;color:var(--text-3)}
+.empty-orders i{font-size:36px;margin-bottom:8px;color:var(--line)}
+.empty-orders p{font-size:13px}
+
+/* স্পেশাল মিল ব্যানার */
+.special-banner{background:linear-gradient(135deg,#f59e0b 0%,#d97706 100%);color:white;border-radius:12px;padding:14px 16px;margin-bottom:16px;display:none}
+.special-banner.active{display:block}
+.special-banner .banner-title{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.special-banner .banner-items{font-size:13px;opacity:.95;line-height:1.5}
+
+.alert{padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:14px;display:flex;align-items:flex-start;gap:8px}
+.alert-error{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+.alert-success{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+.alert-info{background:#eff6ff;color:#1e40af;border:1px solid #bfdbfe}
+.alert-warning{background:#fffbeb;color:#92400e;border:1px solid #fde68a}
+
+.loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.85);display:none;align-items:center;justify-content:center;z-index:300;flex-direction:column;gap:12px}
+.loading-overlay.active{display:flex}
+.spinner{width:40px;height:40px;border:3px solid var(--line);border-top-color:var(--brand);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:13px;color:var(--text-1);font-weight:500}
+
+.app-footer{padding:18px 16px;text-align:center;margin-top:20px}
+.watermark{font-family:'Inter',sans-serif;font-size:11px;color:var(--text-3);letter-spacing:1.5px;text-transform:uppercase;font-weight:500;opacity:.7}
+.watermark .name{color:var(--text-2);font-weight:600}
+
+@media(max-width:768px){
+  .pub-header{padding:12px 14px}
+  .pub-header .app-name{font-size:20px}
+  .pub-main{padding:12px}
+  .nav-buttons{padding:8px 12px}
+  .nav-btn{font-size:13px;padding:7px 12px;min-width:100px}
+  .login-card{padding:20px 16px}
+  .meal-options{flex-direction:row}
+  .meal-option{min-width:90px}
+  .meal-option label{padding:12px 8px}
+  .meal-option label i{font-size:20px}
+}
+</style>
+</head>
+<body>
+
+<header class="pub-header">
+  <div class="app-name">ক্যান্টিন</div>
+  <div class="app-sub">মিল অর্ডার সিস্টেম</div>
+</header>
+
+<!-- নেভিগেশন বাটন -->
+<div class="nav-buttons">
+  <a href="/meal-summary" class="nav-btn"><i class="bi bi-receipt"></i> মিলের হিসাব</a>
+  <a href="/meal-order" class="nav-btn active"><i class="bi bi-list-check"></i> মিল অর্ডার</a>
+</div>
+
+<main class="pub-main">
+  <div id="alertContainer"></div>
+
+  <!-- স্পেশাল মিল ব্যানার (admin এক্টিভেট করলে দেখাবে) -->
+  <div class="special-banner" id="specialBanner">
+    <div class="banner-title"><i class="bi bi-stars"></i> স্পেশাল মিল চলছে!</div>
+    <div class="banner-items" id="specialBannerItems"></div>
+  </div>
+
+  <!-- লগইন সেকশন -->
+  <div id="loginSection">
+    <div class="login-card">
+      <h2><i class="bi bi-person-badge"></i> অফিস আইডি দিয়ে লগইন</h2>
+      <div class="form-group">
+        <label class="form-label" for="officeId"><i class="bi bi-person"></i> অফিস আইডি</label>
+        <input type="text" id="officeId" class="form-control" placeholder="আপনার অফিস আইডি লিখুন" autocomplete="off">
+      </div>
+      <button class="btn btn-primary" id="loginBtn"><i class="bi bi-box-arrow-in-right"></i> লগইন করুন</button>
+    </div>
+  </div>
+
+  <!-- ইউজার ইনফো + অর্ডার সেকশন (লগইন পরে) -->
+  <div id="orderSection" style="display:none">
+    <!-- ইউজার ইনফো -->
+    <div class="user-info">
+      <div class="user-details">
+        <div class="user-name" id="userName">—</div>
+        <div class="user-designation" id="userDesignation">—</div>
+        <div class="user-id" id="userDisplayId">—</div>
+      </div>
+      <button class="logout-btn" id="logoutBtn"><i class="bi bi-box-arrow-right"></i> লগআউট</button>
+    </div>
+
+    <!-- অর্ডার ফর্ম -->
+    <div class="order-card">
+      <h3><i class="bi bi-plus-circle"></i> নতুন মিল অর্ডার</h3>
+      <div class="form-group">
+        <label class="form-label" for="orderDate"><i class="bi bi-calendar3"></i> তারিখ</label>
+        <input type="date" id="orderDate" class="form-control">
+      </div>
+
+      <!-- মিল টাইপ রেডিও -->
+      <div class="meal-options" id="mealOptions">
+        <div class="meal-option">
+          <input type="radio" id="mealBreakfast" name="mealType" value="breakfast" checked>
+          <label for="mealBreakfast"><i class="bi bi-cup-hot"></i><span class="meal-name">সকাল নাস্তা</span><span class="meal-desc">ব্রেকফাস্ট</span></label>
+        </div>
+        <div class="meal-option">
+          <input type="radio" id="mealLunch" name="mealType" value="lunch">
+          <label for="mealLunch"><i class="bi bi-bowl-rice"></i><span class="meal-name">দুপুর মিল</span><span class="meal-desc">লাঞ্চ</span></label>
+        </div>
+        <div class="meal-option" id="specialMealOption" style="display:none">
+          <input type="radio" id="mealSpecial" name="mealType" value="special">
+          <label for="mealSpecial"><i class="bi bi-stars"></i><span class="meal-name">স্পেশাল মিল</span><span class="meal-desc" id="specialMealDesc">স্পেশাল</span></label>
+        </div>
+      </div>
+
+      <!-- স্পেশাল মিল আইটেম তথ্য -->
+      <div class="special-meal-info" id="specialMealInfo">
+        <div class="special-label"><i class="bi bi-info-circle"></i> স্পেশাল মিলের আইটেম:</div>
+        <div class="special-items" id="specialItemsText">—</div>
+      </div>
+
+      <!-- গেস্ট মিল সংখ্যা -->
+      <div class="guest-section">
+        <label><i class="bi bi-people"></i> গেস্ট মিল সংখ্যা (ঐচ্ছিক)</label>
+        <input type="number" id="guestCount" value="1" min="1" max="20">
+      </div>
+
+      <button class="btn btn-primary" id="submitOrderBtn"><i class="bi bi-plus-circle"></i> অর্ডার যোগ করুন</button>
+    </div>
+
+    <!-- আমার অর্ডার তালিকা -->
+    <div class="orders-card">
+      <h3><i class="bi bi-list-check"></i> আমার এই মাসের অর্ডার</h3>
+      <div class="orders-list" id="ordersList"></div>
+      <div class="empty-orders" id="emptyOrders">
+        <i class="bi bi-inbox"></i>
+        <p>এই মাসে এখনও কোনো অর্ডার নেই</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="app-footer"><span class="watermark">Created by <span class="name">Mehedi Hasan</span></span></footer>
+
+<div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div><div class="loading-text" id="loadingText">লোড হচ্ছে...</div></div>
+
+<script type="module">
+import { initializeApp, } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore, initializeFirestore, memoryLocalCache,
+  collection, doc, getDoc, getDocs, getDocsFromServer,
+  addDoc, deleteDoc, onSnapshot, query, where
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCJZ3chRcHhO86cVWIYGIGcTQNshCuBLbE",
+  authDomain: "canteen-5f945.firebaseapp.com",
+  projectId: "canteen-5f945",
+  storageBucket: "canteen-5f945.firebasestorage.app",
+  messagingSenderId: "105675976825",
+  appId: "1:105675976825:web:b39e5c1a67b79f360724a8"
+};
+
+const MONTHS_BN = ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+const app = initializeApp(FIREBASE_CONFIG);
+const db = initializeFirestore(app, { localCache: memoryLocalCache({}) });
+
+// ===== State =====
+let currentUser = null; // {officeId, name, designation}
+let allOfficeUsers = []; // cache of all office users from Firestore
+let specialMealConfig = null; // {active, items, mealCount, replaceBreakfast, replaceLunch}
+let myOrders = []; // current user's orders for current month
+let ordersListenerUnsub = null;
+
+// ===== Helpers =====
+function showLoading(t='লোড হচ্ছে...'){document.getElementById('loadingText').textContent=t;document.getElementById('loadingOverlay').classList.add('active')}
+function hideLoading(){document.getElementById('loadingOverlay').classList.remove('active')}
+function showToast(m,t='info',d=3500){
+  const c={success:'#16a34a',error:'#dc2626',info:'#1e40af',warning:'#d97706'};
+  const w=document.createElement('div');
+  w.style.cssText=`position:fixed;top:16px;right:16px;z-index:200;background:white;border-radius:10px;padding:14px 16px;box-shadow:0 10px 30px -10px rgba(0,0,0,.3);font-size:13px;border-left:3px solid ${c[t]||c.info};display:flex;align-items:center;gap:10px;max-width:340px`;
+  w.innerHTML=`<span>${m}</span>`;
+  document.body.appendChild(w);
+  setTimeout(()=>{w.style.opacity='0';w.style.transition='opacity .3s';setTimeout(()=>w.remove(),300)},d);
+}
+function showAlert(msg, type='info'){
+  const c={success:'alert-success',error:'alert-error',info:'alert-info',warning:'alert-warning'};
+  const el = document.getElementById('alertContainer');
+  el.innerHTML = `<div class="alert ${c[type]||'alert-info'}">${msg}</div>`;
+  setTimeout(()=>{ el.innerHTML = ''; }, 5000);
+}
+function getMonthLabel(i){return MONTHS_BN[i]||''}
+function formatDate(dateStr){
+  if(!dateStr) return '-';
+  const d = new Date(dateStr + 'T00:00:00');
+  return `${d.getDate()} ${getMonthLabel(d.getMonth())} ${d.getFullYear()}`;
+}
+
+// ===== Load office users from Firestore =====
+async function loadOfficeUsers(){
+  try{
+    const snap = await getDocsFromServer(collection(db, 'officeUsers'));
+    allOfficeUsers = [];
+    snap.forEach(d=>{
+      allOfficeUsers.push({id: d.id, ...d.data()});
+    });
+    console.log('[MealOrder] Loaded', allOfficeUsers.length, 'office users');
+  }catch(e){
+    console.warn('[MealOrder] Failed to load office users:', e.message);
+  }
+}
+
+// ===== Load special meal config =====
+async function loadSpecialMealConfig(){
+  try{
+    const snap = await getDocsFromServer(collection(db, 'specialMealConfig'));
+    if(snap.empty){
+      specialMealConfig = {active: false, items: '', mealCount: 1.5, replaceBreakfast: false, replaceLunch: false};
+    }else{
+      // Get the first (and only) config doc
+      let configDoc = null;
+      snap.forEach(d=>{ configDoc = {id: d.id, ...d.data()}; });
+      specialMealConfig = configDoc;
+    }
+    updateSpecialMealUI();
+  }catch(e){
+    console.warn('[MealOrder] Failed to load special meal config:', e.message);
+    specialMealConfig = {active: false, items: '', mealCount: 1.5, replaceBreakfast: false, replaceLunch: false};
+    updateSpecialMealUI();
+  }
+}
+
+// ===== Update special meal UI =====
+function updateSpecialMealUI(){
+  const banner = document.getElementById('specialBanner');
+  const bannerItems = document.getElementById('specialBannerItems');
+  const specialOption = document.getElementById('specialMealOption');
+  const specialInfo = document.getElementById('specialMealInfo');
+  const specialItemsText = document.getElementById('specialItemsText');
+  const specialDesc = document.getElementById('specialMealDesc');
+
+  if(specialMealConfig && specialMealConfig.active){
+    banner.classList.add('active');
+    specialOption.style.display = 'block';
+    const items = specialMealConfig.items || 'আইটেম উল্লেখ নেই';
+    bannerItems.textContent = items;
+    specialItemsText.textContent = items;
+    specialDesc.textContent = `মিল সংখ্যা: ${specialMealConfig.mealCount || 1.5}`;
+
+    // If special meal replaces breakfast or lunch, hide those options
+    if(specialMealConfig.replaceBreakfast){
+      document.getElementById('mealBreakfast').parentElement.style.display = 'none';
+      if(document.querySelector('input[name="mealType"]:checked').value === 'breakfast'){
+        document.querySelector('input[name="mealType"][value="special"]').checked = true;
+        showSpecialInfo();
+      }
+    }else{
+      document.getElementById('mealBreakfast').parentElement.style.display = 'block';
+    }
+    if(specialMealConfig.replaceLunch){
+      document.getElementById('mealLunch').parentElement.style.display = 'none';
+      if(document.querySelector('input[name="mealType"]:checked').value === 'lunch'){
+        document.querySelector('input[name="mealType"][value="special"]').checked = true;
+        showSpecialInfo();
+      }
+    }else{
+      document.getElementById('mealLunch').parentElement.style.display = 'block';
+    }
+  }else{
+    banner.classList.remove('active');
+    specialOption.style.display = 'none';
+    specialInfo.classList.remove('active');
+    // Reset hidden options
+    document.getElementById('mealBreakfast').parentElement.style.display = 'block';
+    document.getElementById('mealLunch').parentElement.style.display = 'block';
+    // If special was selected, switch to breakfast
+    if(document.querySelector('input[name="mealType"]:checked')?.value === 'special'){
+      document.querySelector('input[name="mealType"][value="breakfast"]').checked = true;
+    }
+  }
+}
+
+function showSpecialInfo(){
+  const specialInfo = document.getElementById('specialMealInfo');
+  const checked = document.querySelector('input[name="mealType"]:checked');
+  if(checked && checked.value === 'special'){
+    specialInfo.classList.add('active');
+  }else{
+    specialInfo.classList.remove('active');
+  }
+}
+
+// ===== Login =====
+async function handleLogin(){
+  const officeId = document.getElementById('officeId').value.trim();
+  if(!officeId){ showToast('অফিস আইডি লিখুন', 'error'); return; }
+
+  showLoading('লগইন হচ্ছে...');
+  try{
+    // First try to load office users if not loaded
+    if(allOfficeUsers.length === 0){
+      await loadOfficeUsers();
+    }
+
+    // Find user by officeId
+    const user = allOfficeUsers.find(u =>
+      u.officeId === officeId ||
+      u.officeId === officeId.toLowerCase() ||
+      u.officeId === officeId.toUpperCase() ||
+      String(u.officeId).toLowerCase() === officeId.toLowerCase()
+    );
+
+    if(user){
+      currentUser = {
+        officeId: user.officeId,
+        name: user.name || 'অজানা',
+        designation: user.designation || ''
+      };
+      // Save to sessionStorage
+      sessionStorage.setItem('mealOrderUser', JSON.stringify(currentUser));
+      showOrderSection();
+      await loadMyOrders();
+      showToast(`স্বাগতম, ${currentUser.name}!`, 'success');
+    }else{
+      showToast('এই অফিস আইডি পাওয়া যায়নি। অ্যাডমিনের সাথে যোগাযোগ করুন।', 'error', 5000);
+    }
+  }catch(e){
+    showToast('লগইনে ত্রুটি: ' + e.message, 'error');
+  }finally{ hideLoading(); }
+}
+
+// ===== Show order section =====
+function showOrderSection(){
+  document.getElementById('loginSection').style.display = 'none';
+  document.getElementById('orderSection').style.display = 'block';
+  document.getElementById('userName').textContent = currentUser.name;
+  document.getElementById('userDesignation').textContent = currentUser.designation || '';
+  document.getElementById('userDisplayId').textContent = `আইডি: ${currentUser.officeId}`;
+
+  // Set today's date as default
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('orderDate').value = today;
+}
+
+// ===== Logout =====
+function handleLogout(){
+  currentUser = null;
+  sessionStorage.removeItem('mealOrderUser');
+  document.getElementById('orderSection').style.display = 'none';
+  document.getElementById('loginSection').style.display = 'block';
+  document.getElementById('officeId').value = '';
+  if(ordersListenerUnsub){ ordersListenerUnsub(); ordersListenerUnsub = null; }
+  showToast('লগআউট হয়েছে', 'info');
+}
+
+// ===== Submit order =====
+async function handleSubmitOrder(){
+  if(!currentUser){ showToast('প্রথমে লগইন করুন', 'error'); return; }
+  const dateStr = document.getElementById('orderDate').value;
+  if(!dateStr){ showToast('তারিখ নির্বাচন করুন', 'error'); return; }
+  const mealType = document.querySelector('input[name="mealType"]:checked')?.value;
+  if(!mealType){ showToast('মিল টাইপ নির্বাচন করুন', 'error'); return; }
+  const guestCount = parseInt(document.getElementById('guestCount').value) || 1;
+
+  // Determine meal count
+  let mealCount = 1; // default
+  if(mealType === 'special' && specialMealConfig && specialMealConfig.active){
+    mealCount = Number(specialMealConfig.mealCount) || 1.5;
+  }
+  // Total = mealCount * guestCount
+  const totalMeals = mealCount * guestCount;
+
+  showLoading('অর্ডার সাবমিট হচ্ছে...');
+  try{
+    const orderData = {
+      officeId: currentUser.officeId,
+      name: currentUser.name,
+      designation: currentUser.designation,
+      date: dateStr,
+      mealType: mealType,
+      mealLabel: mealType === 'breakfast' ? 'সকাল নাস্তা' : (mealType === 'lunch' ? 'দুপুর মিল' : 'স্পেশাল মিল'),
+      guestCount: guestCount,
+      mealCount: mealCount,
+      totalMeals: totalMeals,
+      year: parseInt(dateStr.split('-')[0]),
+      month: parseInt(dateStr.split('-')[1]) - 1, // 0-indexed
+      createdAt: new Date().toISOString()
+    };
+
+    await addDoc(collection(db, 'mealOrders'), orderData);
+    showToast('অর্ডার সফলভাবে যোগ হয়েছে!', 'success');
+    // Reset guest count
+    document.getElementById('guestCount').value = 1;
+  }catch(e){
+    showToast('অর্ডারে ত্রুটি: ' + e.message, 'error');
+  }finally{ hideLoading(); }
+}
+
+// ===== Load my orders (real-time) =====
+async function loadMyOrders(){
+  if(!currentUser) return;
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = now.getMonth();
+
+  // Unsubscribe previous listener
+  if(ordersListenerUnsub){ ordersListenerUnsub(); }
+
+  try{
+    const q = query(
+      collection(db, 'mealOrders'),
+      where('officeId', '==', currentUser.officeId),
+      where('year', '==', y),
+      where('month', '==', m)
+    );
+
+    ordersListenerUnsub = onSnapshot(q, (snap)=>{
+      myOrders = [];
+      snap.forEach(d=>{
+        myOrders.push({id: d.id, ...d.data()});
+      });
+      myOrders.sort((a,b)=>{
+        const da = a.date || '';
+        const db2 = b.date || '';
+        return da.localeCompare(db2);
+      });
+      renderMyOrders();
+    }, (err)=>{
+      console.warn('[MealOrder] Orders listener error:', err.message);
+    });
+  }catch(e){
+    console.warn('[MealOrder] Failed to load orders:', e.message);
+  }
+}
+
+// ===== Render my orders =====
+function renderMyOrders(){
+  const list = document.getElementById('ordersList');
+  const empty = document.getElementById('emptyOrders');
+  if(myOrders.length === 0){
+    list.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  list.innerHTML = myOrders.map(o=>{
+    const badgeClass = o.mealType === 'breakfast' ? 'badge-breakfast' : (o.mealType === 'lunch' ? 'badge-lunch' : 'badge-special');
+    const guestText = o.guestCount > 1 ? ` (গেস্ট: ${o.guestCount})` : '';
+    return `<div class="order-item">
+      <div class="order-info">
+        <div class="order-date">${formatDate(o.date)}</div>
+        <div class="order-meal"><span class="meal-badge ${badgeClass}">${o.mealLabel}</span>${guestText}</div>
+      </div>
+      <div class="order-count">${o.totalMeals} মিল</div>
+      <button class="delete-btn" data-id="${o.id}" title="ডিলিট"><i class="bi bi-trash"></i></button>
+    </div>`;
+  }).join('');
+
+  // Delete buttons
+  list.querySelectorAll('.delete-btn').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const orderId = btn.dataset.id;
+      if(!confirm('এই অর্ডার ডিলিট করতে চান?')) return;
+      try{
+        await deleteDoc(doc(db, 'mealOrders', orderId));
+        showToast('অর্ডার ডিলিট হয়েছে', 'success');
+      }catch(e){
+        showToast('ডিলিটে ত্রুটি: ' + e.message, 'error');
+      }
+    });
+  });
+}
+
+// ===== Real-time listener for special meal config =====
+function setupSpecialMealListener(){
+  try{
+    onSnapshot(collection(db, 'specialMealConfig'), (snap)=>{
+      if(snap.empty){
+        specialMealConfig = {active: false, items: '', mealCount: 1.5, replaceBreakfast: false, replaceLunch: false};
+      }else{
+        let configDoc = null;
+        snap.forEach(d=>{ configDoc = {id: d.id, ...d.data()}; });
+        specialMealConfig = configDoc;
+      }
+      updateSpecialMealUI();
+    }, (err)=>{
+      console.warn('[MealOrder] Special meal listener error:', err.message);
+    });
+  }catch(e){}
+}
+
+// ===== Event listeners =====
+document.getElementById('loginBtn').addEventListener('click', handleLogin);
+document.getElementById('officeId').addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter'){ e.preventDefault(); handleLogin(); }
+});
+document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+document.getElementById('submitOrderBtn').addEventListener('click', handleSubmitOrder);
+
+// Meal type radio change
+document.querySelectorAll('input[name="mealType"]').forEach(radio=>{
+  radio.addEventListener('change', showSpecialInfo);
+});
+
+// ===== Init =====
+async function init(){
+  showLoading('ডাটা লোড হচ্ছে...');
+  await loadOfficeUsers();
+  await loadSpecialMealConfig();
+  setupSpecialMealListener();
+
+  // Check if user was previously logged in
+  const saved = sessionStorage.getItem('mealOrderUser');
+  if(saved){
+    try{
+      currentUser = JSON.parse(saved);
+      showOrderSection();
+      await loadMyOrders();
+    }catch(e){
+      sessionStorage.removeItem('mealOrderUser');
+    }
+  }
+  hideLoading();
+}
+
+init();
+
+// ===== Service Worker Registration =====
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('/sw-meal-order.js')
+      .then((reg)=> console.log('[SW-order] ✓ Registered:', reg.scope))
+      .catch((err)=> console.warn('[SW-order] Registration failed:', err.message));
+  });
+  window.addEventListener('beforeinstallprompt', (e)=>{
+    console.log('[PWA] ✓ beforeinstallprompt fired');
+    window.__deferredPrompt = e;
+  });
+}
+</script>
+</body>
+</html>
